@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".activitys.CrearVentaActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessLeaf">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_18ssp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/colorTextSubtitle"
+                android:text="REGISTRAR VENTA DE DIAMANTES"
+                android:layout_margin="@dimen/_4sdp"
+                android:textAlignment="center"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/_15sdp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextSubtitle"
+                    android:text="Selecciona el diamante Vendido"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:id="@+id/add_valor_nuevo"
+                    android:layout_weight="1"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/colorDelete"
+                    android:layout_gravity="end"
+                    />
+
+            </LinearLayout>
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/pager_diamantes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_15sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Selecionado"
+                    android:textColor="@color/colorNoteSubtitleText"
+                    android:id="@+id/diamante_texto"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" X "
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/colorNoteSubtitleText"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="valor"
+                    android:id="@+id/valor_diamante"
+                    android:textColor="@color/colorNoteSubtitleText"
+                    android:textSize="@dimen/_14ssp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_margin="@dimen/_15sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/colorTextSubtitle"
+                    android:fontFamily="@font/ubuntu_bold"
+                    android:id="@+id/fecha"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:id="@+id/calendar_new_date"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_calendari"
+                    android:layout_weight="1"
+                    app:tint="@color/colorWhite"
+                    android:layout_margin="@dimen/_5sdp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/nombre_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_15sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/colorNoteSubtitleText"
+                android:textSize="@dimen/_14ssp"/>
+
+            <EditText
+                android:id="@+id/comentario_opcional"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:background="@null"
+                android:fontFamily="@font/ubuntu_regular"
+                android:gravity="top"
+                android:hint="Añadir un comentario(Opcional)"
+                android:importantForAutofill="no"
+                android:includeFontPadding="false"
+                android:inputType="textMultiLine"
+                android:minHeight="@dimen/_50sdp"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorTextHint"
+                android:textSize="@dimen/_13ssp"
+              />
+
+
+            <ImageView
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:src="@drawable/ic_camera"
+                android:id="@+id/btn_camera"
+                app:tint="@color/colorWhite"
+                android:layout_marginStart="@dimen/_10sdp"
+                />
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/factura_img_recycler"
+                android:scrollbars="horizontal"
+                />
+
+            <Button
+                android:id="@+id/btn_venta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_bold"
+                android:textSize="@dimen/_16ssp"
+                android:textColor="@color/colorWhite"
+                android:text="VENDER"
+                android:background="@drawable/background_venta"
+                android:layout_margin="@dimen/_15sdp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

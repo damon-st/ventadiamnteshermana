@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_4sdp"
+    android:background="@drawable/background_diamante"
+    android:layout_marginBottom="@dimen/_7sdp"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/vista_parent"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:adjustViewBounds="true"
+            android:id="@+id/image_diamante"/>
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_selected"
+            app:tint="@color/colorAccent"
+            android:id="@+id/img_selected"/>
+    </FrameLayout>
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/nombre_vendedor"
+        android:layout_margin="@dimen/_5sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/colorNoteSubtitleText"
+        android:id="@+id/fecha_venta"
+        android:layout_margin="@dimen/_5sdp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diamantes"
+        android:textSize="@dimen/_14ssp"
+        android:fontFamily="@font/ubuntu_regular"
+        android:textColor="@color/colorWhite"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/_5sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_18ssp"
+        android:fontFamily="@font/ubuntu_bold"
+        android:id="@+id/valor_venta"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_16ssp"
+        android:fontFamily="@font/ubuntu_bold"
+        android:id="@+id/description"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:padding="@dimen/_5sdp"
+        android:textColor="@color/colorDelete"
+        android:textSize="@dimen/_16ssp"
+        android:fontFamily="@font/ubuntu_bold"
+        android:id="@+id/respuesta_user"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_10sdp"
+        android:gravity="end"
+        android:padding="@dimen/_5sdp"
+        android:id="@+id/vista_color"
+        android:background="@color/colorDefaultNoteColor"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+      />
+
+</LinearLayout>

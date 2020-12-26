@@ -1,0 +1,4 @@
+include ':openCVLibrary-release'
+include ':documentscanner-release'
+include ':app'
+rootProject.name = "VentaDiamante"

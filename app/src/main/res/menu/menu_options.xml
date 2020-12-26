@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Añadir respuesta"
+        android:id="@+id/respues_item"
+        app:showAsAction="collapseActionView"
+        />
+    <item
+        android:title="Editar venta"
+        android:id="@+id/editar_item"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:title="Ver Imagenes"
+        android:id="@+id/imagenes_item"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:title="Eliminar Venta"
+        android:id="@+id/delete_item"
+        app:showAsAction="collapseActionView"/>
+</menu>

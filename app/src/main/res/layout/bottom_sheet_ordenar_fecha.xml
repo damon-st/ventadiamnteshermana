@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/btn_sheet"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="@dimen/_20ssp"
+        android:textColor="@color/colorWhite"
+        android:fontFamily="@font/ubuntu_regular"
+        android:text="BUSCAR POR FECHAS"
+        android:layout_margin="@dimen/_10sdp"/>
+
+    <LinearLayout
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_calendari"
+            app:tint="@color/colorWhite"
+            android:id="@+id/btn_desde"
+            />
+        <TextView
+            android:id="@+id/textv_desde"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_16ssp"
+            android:textColorHint="@color/colorTextSubtitle"
+            android:fontFamily="@font/ubuntu_medium"
+            android:hint="Desde..."
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_hasta"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_calendari"
+            app:tint="@color/colorWhite"
+            />
+        <TextView
+            android:id="@+id/textv_hasta"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_16ssp"
+            android:textColorHint="@color/colorTextSubtitle"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/ubuntu_medium"
+            android:hint="hasta..."
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_buscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_venta"
+        android:layout_margin="@dimen/_15sdp"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_18ssp"
+        android:text="BUSCAR"
+        android:fontFamily="@font/ubuntu_bold"/>
+
+
+</LinearLayout>

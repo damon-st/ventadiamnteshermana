@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_7sdp"
+    android:layout_gravity="center"
+    android:background="@drawable/background_diamante"
+    >
+
+    <ImageView
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/image_diamante"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/diamantes"
+        android:textSize="@dimen/_14ssp"
+        android:fontFamily="@font/ubuntu_regular"
+        android:textColor="@color/colorWhite"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/_5sdp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_18ssp"
+        android:fontFamily="@font/ubuntu_bold"
+        android:id="@+id/valor_venta"
+        />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_select"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_10sdp"
+            />
+
+
+    <ImageView
+        android:id="@+id/vista_color"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_5sdp"
+        android:src="@drawable/background_dialog"
+        />
+
+</LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/exitApp"
+        android:title="Cerrar Sesion"
+        android:icon="@drawable/ic_exit"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:iconTint="@color/colorIcons"/>
+    <item
+        android:id="@+id/delete_all"
+        android:title="Eliminar ventas"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:iconTint="@color/colorDelete"/>
+
+    <item
+        android:id="@+id/refresh_page"
+        android:title="Marcar mo visto"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:iconTint="@color/colorAccent"/>
+
+
+</menu>
