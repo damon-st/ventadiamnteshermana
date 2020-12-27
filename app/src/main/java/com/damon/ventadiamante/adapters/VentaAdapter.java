@@ -1,7 +1,9 @@
 package com.damon.ventadiamante.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -115,7 +117,22 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
                             intent.putExtra("pid",venta.getIdVentaRef());
                             context.startActivity(intent);
                         }else if (item.getItemId() == R.id.delete_item){
-                            removeVenta(position,venta.getIdVentaRef(),venta.getImage());
+                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                            alert.setTitle("Estas Seguro de eliminar ?");
+                            alert.setMessage("Si eliminas no se podra recuperar.");
+                            alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeVenta(position,venta.getIdVentaRef(),venta.getImage());
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
+
                         }else if (item.getItemId() == R.id.imagenes_item){
                             mostraImagenes(venta.getImage());
                         }
