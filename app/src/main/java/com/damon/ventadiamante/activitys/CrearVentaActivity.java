@@ -1006,7 +1006,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                 try {
                     ScannerConstants.selectedImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),photoURI);
                     startActivityForResult(new Intent(CrearVentaActivity.this,ImageCropActivity.class),1234);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -1016,7 +1016,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                 try {
                     ScannerConstants.selectedImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),photoURI);
                     startActivityForResult(new Intent(CrearVentaActivity.this,ImageCropActivity.class),1234);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -1031,7 +1031,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                     fotosList.add(Uri.fromFile(file));
                     fotosFacturaAdapters.notifyDataSetChanged();
                     System.out.println(fotosList);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

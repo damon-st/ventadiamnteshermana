@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.adapters.AdapterFacturas;
 import com.damon.ventadiamante.adapters.FotosFacturaAdapters;
+import com.damon.ventadiamante.models.ImagesDB;
 
 import java.util.ArrayList;
 
@@ -23,13 +24,13 @@ public class ImageViewer extends AppCompatActivity {
 
     private ImageView imageGrande;
     private PhotoViewAttacher photoView;
-    private String path;
+    private ArrayList<String> ref = new ArrayList<>();
 
     RecyclerView recyclerFotos;
     AdapterFacturas fotosFacturaAdapters;
 
     private ArrayList<String> images = new ArrayList<>();
-    private ArrayList<Uri> data = new ArrayList<>();
+    private String data ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +42,16 @@ public class ImageViewer extends AppCompatActivity {
         recyclerFotos.setHasFixedSize(true);
         recyclerFotos.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
+
         images = getIntent().getStringArrayListExtra("path");
-        for(String paths : images){
-            data.add(Uri.parse(paths));
-        }
+        ref = getIntent().getStringArrayListExtra("ref");
+        data = getIntent().getStringExtra("db");
+//        for (String s : images){
+//            data.add(s);
+//        }
         //photoView = new PhotoViewAttacher(imageGrande);
 
-        fotosFacturaAdapters = new AdapterFacturas(data,this);
+        fotosFacturaAdapters = new AdapterFacturas(images,ref,data,this);
         recyclerFotos.setAdapter(fotosFacturaAdapters);
 
        // Glide.with(this).load(path).into(imageGrande);

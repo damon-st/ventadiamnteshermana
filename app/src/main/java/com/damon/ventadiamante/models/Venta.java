@@ -16,12 +16,12 @@ public class Venta  implements Serializable {
     String descripcion;
     long numeroVenta;
     String idVentaRef;
-    List<String> image;
+    List<ImagesDB> image;
 
     public Venta() {
     }
 
-    public Venta(String vendedorName, String vendedorUID, String fechaVenta, String colorValorPorVenta, String colorVendedor, String descripcionDiamantes, double precioDiamante, String descripcion, long numeroVenta, String idVentaRef, List<String> image) {
+    public Venta(String vendedorName, String vendedorUID, String fechaVenta, String colorValorPorVenta, String colorVendedor, String descripcionDiamantes, double precioDiamante, String descripcion, long numeroVenta, String idVentaRef, List<ImagesDB> image) {
         this.vendedorName = vendedorName;
         this.vendedorUID = vendedorUID;
         this.fechaVenta = fechaVenta;
@@ -35,11 +35,11 @@ public class Venta  implements Serializable {
         this.image = image;
     }
 
-    public List<String> getImage() {
+    public List<ImagesDB> getImage() {
         return image;
     }
 
-    public void setImage(List<String> image) {
+    public void setImage(List<ImagesDB> image) {
         this.image = image;
     }
 

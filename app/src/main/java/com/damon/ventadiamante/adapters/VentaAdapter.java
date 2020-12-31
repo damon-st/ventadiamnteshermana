@@ -23,6 +23,7 @@ import com.damon.ventadiamante.activitys.CrearVentaActivity;
 import com.damon.ventadiamante.activitys.ImageViewer;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
+import com.damon.ventadiamante.models.ImagesDB;
 import com.damon.ventadiamante.models.Venta;
 import com.damon.ventadiamante.viewholder.VentaViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -134,7 +135,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
                             }).create().show();
 
                         }else if (item.getItemId() == R.id.imagenes_item){
-                            mostraImagenes(venta.getImage());
+                            mostraImagenes(venta.getImage(),venta.getIdVentaRef());
                         }
                         return false;
                     }
@@ -165,18 +166,26 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     }
 
 
-    private void mostraImagenes(List<String> image) {
+    private void mostraImagenes(List<ImagesDB> image, String idVentaRef) {
         ArrayList<String> img = new ArrayList<>(image.size());
-        img.addAll(image);
+        ArrayList<String> ref = new ArrayList<>(image.size());
+
+        for (ImagesDB images : image) {
+            img.add(images.getImg());
+            ref.add(images.getRef());
+        }
         Intent intent  = new Intent(context, ImageViewer.class);
         intent.putStringArrayListExtra("path",img);
+        intent.putStringArrayListExtra("ref",ref);
+        intent.putExtra("db",idVentaRef);
+
         context.startActivity(intent);
     }
 
-    private void removeVenta(int position, String pid, List<String> image){
+    private void removeVenta(int position, String pid, List<ImagesDB> image){
         if (image.size() > 0){
-            for (String  url : image){
-                final StorageReference ref = storage.getReferenceFromUrl(url);
+            for (ImagesDB  url : image){
+                final StorageReference ref = storage.getReferenceFromUrl(url.getImg());
                 ref.delete();
             }
         }
@@ -228,7 +237,11 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     }
 
     public List<String> pathImg(int pos){
-        return  ventaList.get(pos).getImage();
+        List<String> paths = new ArrayList<>();
+        for (ImagesDB s : ventaList.get(pos).getImage()) {
+            paths.add(s.getImg());
+        }
+        return  paths;
     }
 
 

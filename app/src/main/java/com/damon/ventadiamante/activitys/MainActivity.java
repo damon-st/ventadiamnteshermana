@@ -40,6 +40,7 @@ import com.damon.ventadiamante.adapters.VentaAdapter;
 import com.damon.ventadiamante.interfaces.BuscarClick;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
+import com.damon.ventadiamante.models.ImagesDB;
 import com.damon.ventadiamante.models.Venta;
 import com.damon.ventadiamante.notifications.APIService;
 import com.damon.ventadiamante.notifications.Client;
@@ -726,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                             String descripcion = "";
                             long numeroVenta = 0;
                             String idVentaRef = "";
-                            List<String> image = new ArrayList<>();
+                            List<ImagesDB> image = new ArrayList<>();
 
                             if (snapshot.child("vendedorName").getValue() !=null)
                                 vendedorName = snapshot.child("vendedorName").getValue().toString();
@@ -759,9 +760,10 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                             if (snapshot.child("image").getChildrenCount() >0){
                                 for (DataSnapshot dataSnapshot: snapshot.child("image").getChildren()){
-                                    image.add(dataSnapshot.getValue().toString());
+                                    image.add(new ImagesDB(dataSnapshot.getKey(),dataSnapshot.getValue().toString()));
                                     rutasImagenes.clear();
                                     rutasImagenes.add(dataSnapshot.getValue().toString());
+                                    System.out.println(dataSnapshot.getKey());
                             }
                         }
 
@@ -794,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                         String descripcion = "";
                         long numeroVenta = 0;
                         String idVentaRef = "";
-                        List<String> image = new ArrayList<>();
+                        List<ImagesDB> image = new ArrayList<>();
 
                         if (snapshot.child("vendedorName").getValue() !=null)
                             vendedorName = snapshot.child("vendedorName").getValue().toString();
@@ -827,7 +829,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                         if (snapshot.child("image").getChildrenCount() >0){
                             for (DataSnapshot dataSnapshot: snapshot.child("image").getChildren()){
-                                image.add(dataSnapshot.getValue().toString());
+                                image.add(new ImagesDB(dataSnapshot.getKey(),dataSnapshot.getValue().toString()));
                                 rutasImagenes.clear();
                                 rutasImagenes.add(dataSnapshot.getValue().toString());
                             }
@@ -859,7 +861,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                         String descripcion = "";
                         long numeroVenta = 0;
                         String idVentaRef = "";
-                        List<String> image = new ArrayList<>();
+                        List<ImagesDB> image = new ArrayList<>();
 
                         if (snapshot.child("vendedorName").getValue() !=null)
                             vendedorName = snapshot.child("vendedorName").getValue().toString();
@@ -892,7 +894,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                         if (snapshot.child("image").getChildrenCount() >0){
                             for (DataSnapshot dataSnapshot: snapshot.child("image").getChildren()){
-                                image.add(dataSnapshot.getValue().toString());
+                                image.add(new ImagesDB(dataSnapshot.getKey(),dataSnapshot.getValue().toString()));
                             }
                         }
 
@@ -1023,12 +1025,12 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             });
 
             if (venta.getImage() != null){
-                view.findViewById(R.id.mostarImg).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.mostarImg).setVisibility(View.GONE);
                 view.findViewById(R.id.mostarImg).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(MainActivity.this, ImageViewer.class);
-                        intent.putStringArrayListExtra("path", (ArrayList<String>) venta.getImage());
+                       // intent.putStringArrayListExtra("path", (ArrayList<String>) venta.getImage());
                         startActivity(intent);
                         dialogAddComentario.dismiss();
                         dialogAddComentario = null;
