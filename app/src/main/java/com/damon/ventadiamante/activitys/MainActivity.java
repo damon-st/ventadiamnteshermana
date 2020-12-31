@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private  int mCurrentPage =1;
     public  static final int TOTAL_ITEMS_TO_LOAD = 10;
     boolean isScrolling;
+    private ImageButton btn_scroll_down;
 
     int currentItems, totalItems, scrollOutitems;
 
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         createVenta = findViewById(R.id.imageAddNoteMain);
 
+        btn_scroll_down = findViewById(R.id.ultimoItem);
         ordenar_porFecha = findViewById(R.id.imageOrderFecha);
         clear_text = findViewById(R.id.borrar_text);
         nuevoTotalTV = findViewById(R.id.nuevo_valor);
@@ -253,6 +256,43 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     enableActionMode(position);
             }
         });
+
+        ventaRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE){
+                    //btn_scroll_down.setVisibility(View.GONE);
+                    isScrolling = true;
+                }else {
+                    isScrolling = false;
+                    //btn_scroll_down.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int visibleItemcout  = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int pastVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                if ((pastVisibleItem+visibleItemcout >= totalItemCount) ){
+                    btn_scroll_down.setVisibility(View.GONE);
+                }else {
+                    btn_scroll_down.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+        btn_scroll_down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ventaRecycler.smoothScrollToPosition(ventaAdapter.getItemCount());
+            }
+        });
+
     }
 
     private void enableActionMode(int position) {

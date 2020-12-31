@@ -132,7 +132,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/venta_recyclerView"
         android:layout_width="match_parent"
-        android:scrollbars="vertical"
+        app:fastScrollEnabled="true"
         android:scrollbarThumbVertical="@color/colorDelete"
         android:layout_height="0dp"
         android:paddingStart="@dimen/_12sdp"
@@ -140,6 +140,10 @@
         android:paddingBottom="@dimen/_12sdp"
         app:layout_constraintBottom_toTopOf="@id/layoutQuickActions"
         app:layout_constraintTop_toBottomOf="@id/layoutSearch"
+        app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+        app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
+        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
         />
 
 
@@ -193,6 +197,23 @@
         app:layout_constraintTop_toTopOf="@id/layoutQuickActions"
         app:tint="@color/colorPrimary"
         android:layout_marginRight="@dimen/_30sdp" />
+
+
+    <ImageButton
+        android:id="@+id/ultimoItem"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:src="@drawable/ic_rowdown"
+        android:background="@drawable/background_add_buttom"
+        android:backgroundTint="@color/colorDelete"
+        android:tint="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/layoutQuickActions"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:visibility="gone"
+        />
+
 
     <ImageView
         android:id="@+id/imageOrderFecha"
