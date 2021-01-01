@@ -47,7 +47,9 @@ import com.damon.ventadiamante.adapters.DiamantesAdapter;
 import com.damon.ventadiamante.adapters.FotosFacturaAdapters;
 import com.damon.ventadiamante.interfaces.DiamanteClick;
 import com.damon.ventadiamante.models.Diamante;
+import com.damon.ventadiamante.models.ImagesDB;
 import com.damon.ventadiamante.models.Users;
+import com.damon.ventadiamante.models.Venta;
 import com.damon.ventadiamante.notifications.APIService;
 import com.damon.ventadiamante.notifications.Client;
 import com.damon.ventadiamante.notifications.Data;
@@ -150,7 +152,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
 
     String ventId;
 
-    boolean isUpdate;
+    boolean isUpdate,isNewDiamante;
 
     int cuentaFotosSubidas;
 
@@ -270,45 +272,91 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
         btn_addFactura.setOnClickListener(v -> ShowDialogSelected());
 
 
+        //aqui compruebo si me llega o no el objeto con los datos
         Intent intent = getIntent();
-        if (intent!=null && intent.getStringExtra("pid")!= null){
+        Bundle bundle = getIntent().getExtras();
+        if (intent!=null && bundle!= null){
+//        if (intent!=null && intent.getStringExtra("pid")!= null){
             isUpdate = true;
-            ventId = intent.getStringExtra("pid");
-            vender.setText("Actualizar");
-            ventaRef.child(ventId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.child("descripcion").exists()){
-                        fecha_tv.setText(snapshot.child("fechaVenta").getValue().toString());
-                        diamante_texto = snapshot.child("descripcionDiamantes").getValue().toString();
-                        diamante_text.setText(diamante_texto);
-                        valor_diama = Double.parseDouble(snapshot.child("precioDiamante").getValue().toString());
-                        valor_diamante.setText("$"+valor_diama);
-                        diamantesAdapter.setValor(valor_diama);
-                        diamantesAdapter.notifyDataSetChanged();
-                        descripcion = snapshot.child("descripcion").getValue().toString();
-                        descripcion_opcional.setText(descripcion);
-                        colorVenta = snapshot.child("colorVendedor").getValue().toString();
+            Venta venta =(Venta)bundle.getSerializable("pid");
+//            ventId = intent.getStringExtra("pid");
+              ventId = venta.getIdVentaRef();
 
-                        if (snapshot.child("image").getChildrenCount()>0){
-                            cuentaFotosSubidas =(int)snapshot.child("image").getChildrenCount();
-                            System.out.println("Fotos actuales " + cuentaFotosSubidas);
-                            for (DataSnapshot dataSnapshot : snapshot.child("image").getChildren()){
-                                fotosList.add(Uri.parse(dataSnapshot.getValue().toString()));
-                                listaNueva.add(dataSnapshot.getValue().toString());
-                                mediaIdList.add(dataSnapshot.getKey().toString());
-                                System.out.println(dataSnapshot.getKey().toString());
-                                fotosFacturaAdapters.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
+             vender.setText("Actualizar");
+             fecha_tv.setText(venta.getFechaVenta());
+             diamante_texto = venta.getDescripcionDiamantes();
+             diamante_text.setText(diamante_texto);
+             valor_diama = venta.getPrecioDiamante();
+             valor_diamante.setText("$"+valor_diama);
+             new Thread(){
+                 @Override
+                 public void run() {
+                     super.run();
+                     for (int  i =0; i< diamanteList.size(); i++){
+                         String d = diamanteList.get(i).getDiamantes().toLowerCase().replace(" ","");
+                         String n = diamante_texto.toLowerCase().replace(" ", "");
+                         System.out.println(d);
+                         System.out.println(n);
+                         if (d != n){
+                             isNewDiamante = true;
+                         }else {
+                             isNewDiamante = false;
+                         }
+                     }
+                     if (isNewDiamante){
+                         diamanteList.add(new Diamante(diamante_texto,valor_diama,R.drawable.diamantes_free,"#FF4842"));
+                     }
+                 }
+             }.start();
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+             diamantesAdapter.setValor(valor_diama);
+             diamantesAdapter.notifyDataSetChanged();
+             descripcion = venta.getDescripcion();
+             descripcion_opcional.setText(descripcion);
+             colorVenta = venta.getColorVendedor();
+             cuentaFotosSubidas = venta.getImage().size();
+             for (ImagesDB  img : venta.getImage()){
+                 fotosList.add(Uri.parse(img.getImg()));
+                 listaNueva.add(img.getImg());
+                 mediaIdList.add(img.getRef());
+                 fotosFacturaAdapters.notifyDataSetChanged();
+             }
 
-                }
-            });
+
+//            ventaRef.child(ventId).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    if (snapshot.child("descripcion").exists()){
+//                        fecha_tv.setText(snapshot.child("fechaVenta").getValue().toString());
+//                        diamante_texto = snapshot.child("descripcionDiamantes").getValue().toString();
+//                        diamante_text.setText(diamante_texto);
+//                        valor_diama = Double.parseDouble(snapshot.child("precioDiamante").getValue().toString());
+//                        valor_diamante.setText("$"+valor_diama);
+//                        diamantesAdapter.setValor(valor_diama);
+//                        diamantesAdapter.notifyDataSetChanged();
+//                        descripcion = snapshot.child("descripcion").getValue().toString();
+//                        descripcion_opcional.setText(descripcion);
+//                        colorVenta = snapshot.child("colorVendedor").getValue().toString();
+//
+//                        if (snapshot.child("image").getChildrenCount()>0){
+//                            cuentaFotosSubidas =(int)snapshot.child("image").getChildrenCount();
+//                            System.out.println("Fotos actuales " + cuentaFotosSubidas);
+//                            for (DataSnapshot dataSnapshot : snapshot.child("image").getChildren()){
+//                                fotosList.add(Uri.parse(dataSnapshot.getValue().toString()));
+//                                listaNueva.add(dataSnapshot.getValue().toString());
+//                                mediaIdList.add(dataSnapshot.getKey().toString());
+//                                System.out.println(dataSnapshot.getKey().toString());
+//                                fotosFacturaAdapters.notifyDataSetChanged();
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
         }
 
         vender.setOnClickListener(new View.OnClickListener() {

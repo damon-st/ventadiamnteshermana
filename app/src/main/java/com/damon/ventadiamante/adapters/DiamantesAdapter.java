@@ -90,6 +90,9 @@ public class DiamantesAdapter  extends RecyclerView.Adapter<DiamantesViewHolder>
 
 
     }
+
+
+
     private double valor;
     public void setValor(double valor){
         this.valor = valor;

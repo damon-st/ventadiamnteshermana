@@ -115,8 +115,11 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
                             ventaSingleClick.onCLickDiamante(venta,position);
                             popupMenu.dismiss();
                         }else if (item.getItemId() == R.id.editar_item){
+                            Bundle bundle  =new Bundle();
+                            bundle.putSerializable("pid",venta);
                             Intent intent = new Intent(context, CrearVentaActivity.class);
-                            intent.putExtra("pid",venta.getIdVentaRef());
+                           // intent.putExtra("pid",venta.getIdVentaRef());
+                            intent.putExtras(bundle);
                             context.startActivity(intent);
                         }else if (item.getItemId() == R.id.delete_item){
                             AlertDialog.Builder alert = new AlertDialog.Builder(context);
@@ -170,7 +173,6 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     private void mostraImagenes(List<ImagesDB> image, String idVentaRef) {
         ArrayList<String> img = new ArrayList<>(image.size());
         ArrayList<String> ref = new ArrayList<>(image.size());
-
 
         for (ImagesDB images : image) {
             img.add(images.getImg());
