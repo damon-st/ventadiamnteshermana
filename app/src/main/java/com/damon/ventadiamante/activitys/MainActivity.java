@@ -37,6 +37,7 @@ import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.Tools;
 import com.damon.ventadiamante.adapters.CustomBottomSheet;
 import com.damon.ventadiamante.adapters.VentaAdapter;
+import com.damon.ventadiamante.conexcion.CheckNetworkConnection;
 import com.damon.ventadiamante.interfaces.BuscarClick;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
 
         progressDialog = new ProgressDialog(this);

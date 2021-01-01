@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.damon.ventadiamante.R;
+import com.damon.ventadiamante.conexcion.CheckNetworkConnection;
 import com.damon.ventadiamante.notifications.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -198,20 +199,39 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if (firebaseUser !=null){
-           if (networkInfo != null && networkInfo.isConnected()){
-               updateToken();
-               Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-               startActivity(intent);
-               finish();
-           }else {
-               Intent intent = new Intent(LoginActivity.this, ConexionError.class);
-               startActivity(intent);
-               finish();
-           }
 
-        }
+        new CheckNetworkConnection(LoginActivity.this, new CheckNetworkConnection.OnConnectionCallback() {
+//
+            @Override
+            public void onConnectionSuccess() {
+                System.out.println("Exito ");
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                if (firebaseUser !=null){
+                    if (networkInfo != null && networkInfo.isConnected()){
+                        updateToken();
+                        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Intent intent = new Intent(LoginActivity.this, ConexionError.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onConnectionFail(String msg) {
+                System.out.println("Noooo ");
+                Toast.makeText(LoginActivity.this, "onFail()" + msg, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, ConexionError.class);
+                startActivity(intent);
+                finish();
+            }
+        }).execute();
+
+
 
 
     }

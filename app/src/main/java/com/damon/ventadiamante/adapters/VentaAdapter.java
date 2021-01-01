@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.SparseBooleanArray;
@@ -169,6 +170,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     private void mostraImagenes(List<ImagesDB> image, String idVentaRef) {
         ArrayList<String> img = new ArrayList<>(image.size());
         ArrayList<String> ref = new ArrayList<>(image.size());
+
 
         for (ImagesDB images : image) {
             img.add(images.getImg());
