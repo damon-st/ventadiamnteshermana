@@ -41,6 +41,7 @@ import com.damon.ventadiamante.conexcion.CheckNetworkConnection;
 import com.damon.ventadiamante.interfaces.BuscarClick;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
+import com.damon.ventadiamante.models.Diamante;
 import com.damon.ventadiamante.models.ImagesDB;
 import com.damon.ventadiamante.models.Venta;
 import com.damon.ventadiamante.notifications.APIService;
@@ -127,13 +128,14 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
     private ProgressDialog progressDialog;
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 
 
         progressDialog = new ProgressDialog(this);
@@ -1329,4 +1331,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             return false;
         }
     }
+
+
+
 }
