@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
     private void nuevoValor(){
         setTotalNuevo(ventaAdapter.valor());
-        linearLayoutManager.smoothScrollToPosition(ventaRecycler,new RecyclerView.State(),ventaRecycler.getAdapter().getItemCount());
+       // linearLayoutManager.smoothScrollToPosition(ventaRecycler,new RecyclerView.State(),ventaRecycler.getAdapter().getItemCount());
     }
 
     private void setData(){
