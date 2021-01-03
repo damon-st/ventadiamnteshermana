@@ -199,39 +199,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        new CheckNetworkConnection(LoginActivity.this, new CheckNetworkConnection.OnConnectionCallback() {
-//
-            @Override
-            public void onConnectionSuccess() {
-                System.out.println("Exito ");
-                FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                if (firebaseUser !=null){
-                    if (networkInfo != null && networkInfo.isConnected()){
-                        updateToken();
-                        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        Intent intent = new Intent(LoginActivity.this, ConexionError.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onConnectionFail(String msg) {
-                System.out.println("Noooo ");
-                Toast.makeText(LoginActivity.this, "onFail()" + msg, Toast.LENGTH_SHORT).show();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser !=null){
+            if (networkInfo != null && networkInfo.isConnected()){
+                updateToken();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
                 Intent intent = new Intent(LoginActivity.this, ConexionError.class);
                 startActivity(intent);
                 finish();
             }
-        }).execute();
 
-
+        }
 
 
     }

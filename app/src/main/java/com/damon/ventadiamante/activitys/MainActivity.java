@@ -769,7 +769,6 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                                     image.add(new ImagesDB(dataSnapshot.getKey(),dataSnapshot.getValue().toString()));
                                     rutasImagenes.clear();
                                     rutasImagenes.add(dataSnapshot.getValue().toString());
-                                    System.out.println(dataSnapshot.getKey());
                             }
                         }
 
@@ -1204,6 +1203,13 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                 marcarVentaAnotado();
                 mode.finish();
                 return true;
+            }else if (id == R.id.seleccionartodo){
+                selectedAll(mode);
+                return true;
+            }else if (id == R.id.calcularprecio){
+                selectedCalculatePrice();
+
+                return true;
             }
             return false;
         }
@@ -1212,7 +1218,23 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         public void onDestroyActionMode(ActionMode mode) {
             ventaAdapter.clearSelections();
             actionMode = null;
+            setTotal(total);
             Tools.setSystemBarColor(MainActivity.this,R.color.colorPrimary);
+        }
+    }
+
+    private void selectedCalculatePrice() {
+       double total=0;
+        List<Integer> selectedItempost = ventaAdapter.getSelectItms();
+        for (int i = selectedItempost.size()-1;i>=0; i--){
+            total = total+ventaList.get(selectedItempost.get(i)).getPrecioDiamante();
+        }
+        setTotal(total);
+    }
+
+    private void selectedAll(ActionMode mode) {
+        for (int i = 0; i< ventaList.size(); i++){
+            enableActionMode(i);
         }
     }
 

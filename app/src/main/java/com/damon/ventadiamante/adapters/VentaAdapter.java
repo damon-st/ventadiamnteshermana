@@ -249,6 +249,8 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     }
 
 
+
+
     public void clearSelections(){
         selected_items.clear();
         notifyDataSetChanged();
