@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -186,6 +187,11 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         ventaAdapter = new VentaAdapter(this,ventaList,this);
         getTotalValor();
+
+
+//        LayoutAnimationController controller  =AnimationUtils.loadLayoutAnimation(this,R.anim.fade_scale_animation);
+//        ventaRecycler.setLayoutAnimation(controller);
+//        ventaRecycler.scheduleLayoutAnimation();
         ventaRecycler.setAdapter(ventaAdapter);
 
        // getDataVenta();

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -83,6 +84,14 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull VentaViewHolder holder, int position) {
+
+        //animacion img
+        holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
+
+        //animation container
+
+        holder.linearLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+
         Venta venta = ventaList.get(position);
         holder.img_diamante.setImageResource(R.drawable.diamantes_free);
         holder.name_vendedor.setText(venta.getVendedorName());
@@ -180,6 +189,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
 
 
         toggleCheckedIcon(holder,position);
+
 
     }
 
