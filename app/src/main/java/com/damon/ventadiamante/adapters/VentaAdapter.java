@@ -2,6 +2,8 @@ package com.damon.ventadiamante.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -87,6 +90,17 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
         holder.descrip_diamantes.setText(venta.getDescripcionDiamantes());
         holder.valor_venta.setText("$"+ venta.getPrecioDiamante());
         holder.descripcion.setText(venta.getDescripcion());
+
+        holder.descripcion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData data = ClipData.newPlainText("",venta.getDescripcion());
+                clipboardManager.setPrimaryClip(data);
+                Toast.makeText(context, "Se a copiado descripcion", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (venta.getColorValorPorVenta().equals(""))
             holder.respuesta_user.setVisibility(View.GONE);
         else

@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
 
 
+    Animation animationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         setContentView(R.layout.activity_main);
 
 
+        animationUtils = AnimationUtils.loadAnimation(this,R.anim.sacudir_btn);
         progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -288,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     btn_scroll_down.setVisibility(View.GONE);
                 }else {
                     btn_scroll_down.setVisibility(View.VISIBLE);
+                    btn_scroll_down.startAnimation(animationUtils);
                 }
 
             }
