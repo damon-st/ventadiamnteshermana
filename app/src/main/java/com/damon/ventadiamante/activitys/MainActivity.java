@@ -188,11 +188,12 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         ventaAdapter = new VentaAdapter(this,ventaList,this);
         getTotalValor();
 
+        ventaRecycler.setAdapter(ventaAdapter);
 
-//        LayoutAnimationController controller  =AnimationUtils.loadLayoutAnimation(this,R.anim.fade_scale_animation);
+//        LayoutAnimationController controller  =AnimationUtils.loadLayoutAnimation(this,R.anim.layout_slide_right);
 //        ventaRecycler.setLayoutAnimation(controller);
 //        ventaRecycler.scheduleLayoutAnimation();
-        ventaRecycler.setAdapter(ventaAdapter);
+
 
        // getDataVenta();
 
