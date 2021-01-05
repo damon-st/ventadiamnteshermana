@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 //    FirebaseRecyclerOptions<Venta> options;
 //    FirebaseRecyclerAdapter<Venta, VentaViewHolder> adapter;
     double total;
-    TextView totalTV,nuevoTotalTV;
+    TextView totalTV,nuevoTotalTV,count_ventas;
     boolean isUser;
     EditText inputSearch ;
 
@@ -155,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         createVenta = findViewById(R.id.imageAddNoteMain);
 
+
+        count_ventas = findViewById(R.id.count_ventas);
         btn_scroll_down = findViewById(R.id.ultimoItem);
         ordenar_porFecha = findViewById(R.id.imageOrderFecha);
         clear_text = findViewById(R.id.borrar_text);
@@ -314,6 +316,19 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             }
         });
 
+
+        getTotalCountsVentas();
+    }
+
+    private void getTotalCountsVentas() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (ventaAdapter.getItemCount() != 0){
+                    count_ventas.setText("N° " + ventaAdapter.getItemCount()/2);
+                }
+            }
+        },1000);
     }
 
     private void enableActionMode(int position) {
@@ -420,6 +435,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private void nuevoValor(){
         setTotalNuevo(ventaAdapter.valor());
        // linearLayoutManager.smoothScrollToPosition(ventaRecycler,new RecyclerView.State(),ventaRecycler.getAdapter().getItemCount());
+        getTotalCountsVentas();
     }
 
     private void setData(){
@@ -1253,7 +1269,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
        double total=0;
         List<Integer> selectedItempost = ventaAdapter.getSelectItms();
         for (int i = selectedItempost.size()-1;i>=0; i--){
-            total = total+ventaList.get(selectedItempost.get(i)).getVenta().getPrecioDiamante();
+            if (ventaList.get(selectedItempost.get(i)).getVenta()!=null){
+                total = total+ventaList.get(selectedItempost.get(i)).getVenta().getPrecioDiamante();
+            }
         }
         setTotal(total);
     }
@@ -1267,6 +1285,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private void marcarVentaAnotado() {
         List<Integer> selectedItemPost = ventaAdapter.getSelectItms();
         for (int i = selectedItemPost.size()-1; i >=0 ; i--){
+            if(ventaList.get(selectedItemPost.get(i)).getVenta() !=null)
             marcarAnotado(ventaAdapter.dbRef(selectedItemPost.get(i)),ventaList.get(selectedItemPost.get(i)).getVenta().getVendedorUID());
         }
     }

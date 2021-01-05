@@ -85,6 +85,7 @@
                 android:id="@+id/fecha_venta"
                 android:layout_margin="@dimen/_5sdp"
                 android:textAlignment="center"
+                android:visibility="gone"
                 />
 
             <TextView

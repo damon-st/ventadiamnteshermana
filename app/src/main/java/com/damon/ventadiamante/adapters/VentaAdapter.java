@@ -113,7 +113,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             ((VentaViewHolder)holder).img_diamante.setImageResource(R.drawable.diamantes_free);
             ((VentaViewHolder)holder).name_vendedor.setText(venta.getVendedorName());
-            ((VentaViewHolder)holder).fecha_venta.setText(venta.getFechaVenta());
+           // ((VentaViewHolder)holder).fecha_venta.setText(venta.getFechaVenta());
             ((VentaViewHolder)holder).descrip_diamantes.setText(venta.getDescripcionDiamantes());
             ((VentaViewHolder)holder).valor_venta.setText("$"+ venta.getPrecioDiamante());
             ((VentaViewHolder)holder).descripcion.setText(venta.getDescripcion());

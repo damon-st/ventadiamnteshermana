@@ -167,6 +167,7 @@
             android:textSize="@dimen/_20ssp"
             android:fontFamily="@font/ubuntu_medium"
             android:textColor="@color/colorWhite"
+            android:layout_weight="1"
             />
 
         <TextView
@@ -178,8 +179,22 @@
             android:textSize="@dimen/_20ssp"
             android:fontFamily="@font/ubuntu_medium"
             android:textColor="@color/colorWhite"
+            android:layout_weight="1"
             />
 
+
+        <TextView
+            android:id="@+id/count_ventas"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_23sdp"
+            android:text="N°"
+            android:textSize="@dimen/_20ssp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:textColor="@color/colorWhite"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:gravity="end"
+            />
 
     </LinearLayout>
 
