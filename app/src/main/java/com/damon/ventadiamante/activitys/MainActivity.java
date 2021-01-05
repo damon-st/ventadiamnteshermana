@@ -46,7 +46,9 @@ import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
 import com.damon.ventadiamante.models.Diamante;
 import com.damon.ventadiamante.models.ImagesDB;
+import com.damon.ventadiamante.models.TimeTextM;
 import com.damon.ventadiamante.models.Venta;
+import com.damon.ventadiamante.models.VentaPrincipal;
 import com.damon.ventadiamante.notifications.APIService;
 import com.damon.ventadiamante.notifications.Client;
 import com.damon.ventadiamante.notifications.Data;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private FirebaseAuth mAuth;
     private ImageView createVenta,delete_all,refresh_page,calendario_btn,clear_text,ordenar_porFecha;
     VentaAdapter ventaAdapter;
-    List<Venta> ventaList = new ArrayList<>();
+    List<VentaPrincipal> ventaList = new ArrayList<>();
     RecyclerView ventaRecycler;
     private DatabaseReference referenceVenta,refUser;
 //    FirebaseRecyclerOptions<Venta> options;
@@ -461,58 +463,58 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
 
-    private void loadMoreVenta(){
-        Query ventQuery = referenceVenta.orderByKey().endAt(mLastKey).limitToLast(10);
-        ventQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-              Venta  venta = snapshot.getValue(Venta.class);
-                String ventaKey =  snapshot.getKey();
-                listKeyDelete.add(snapshot.getKey());
-                if (!mPrevKey.equals(ventaKey)){
-                    ventaList.add(itemPost++,venta);
-//                    total = total+venta.getPrecioDiamante();
+//    private void loadMoreVenta(){
+//        Query ventQuery = referenceVenta.orderByKey().endAt(mLastKey).limitToLast(10);
+//        ventQuery.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//              Venta  venta = snapshot.getValue(Venta.class);
+//                String ventaKey =  snapshot.getKey();
+//                listKeyDelete.add(snapshot.getKey());
+//                if (!mPrevKey.equals(ventaKey)){
+//                    ventaList.add(itemPost++,venta);
+////                    total = total+venta.getPrecioDiamante();
+////
+////                    setTotal(total);
+//                }else {
+//                    mPrevKey = mLastKey;
+//                }
 //
-//                    setTotal(total);
-                }else {
-                    mPrevKey = mLastKey;
-                }
-
-                if (itemPost ==1){
-                    mLastKey = ventaKey;
-                }
-
-                ventaAdapter.notifyDataSetChanged();
-
-
-                swipeRefreshLayout.setRefreshing(false);
-
-                linearLayoutManager.scrollToPositionWithOffset(10,0);
-
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//                if (itemPost ==1){
+//                    mLastKey = ventaKey;
+//                }
+//
+//                ventaAdapter.notifyDataSetChanged();
+//
+//
+//                swipeRefreshLayout.setRefreshing(false);
+//
+//                linearLayoutManager.scrollToPositionWithOffset(10,0);
+//
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
 
 
@@ -612,117 +614,117 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
 
     Query queryVeta;
-    private void getDataVenta(){
-
-//       referenceVenta.addValueEventListener(new ValueEventListener() {
-//           @Override
-//           public void onDataChange(@NonNull DataSnapshot snapshot) {
-//               if (snapshot.exists()){
-//                   for (DataSnapshot dataSnapshot: snapshot.getChildren()){
-//                       Venta venta = dataSnapshot.getValue(Venta.class);
-//                       ventaList.add(venta);
-//                       ventaAdapter.notifyDataSetChanged();
-//                   }
-//               }
-//           }
+//    private void getDataVenta(){
 //
-//           @Override
-//           public void onCancelled(@NonNull DatabaseError error) {
+////       referenceVenta.addValueEventListener(new ValueEventListener() {
+////           @Override
+////           public void onDataChange(@NonNull DataSnapshot snapshot) {
+////               if (snapshot.exists()){
+////                   for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+////                       Venta venta = dataSnapshot.getValue(Venta.class);
+////                       ventaList.add(venta);
+////                       ventaAdapter.notifyDataSetChanged();
+////                   }
+////               }
+////           }
+////
+////           @Override
+////           public void onCancelled(@NonNull DatabaseError error) {
+////
+////           }
+////       });
 //
-//           }
-//       });
-
-//        options = new FirebaseRecyclerOptions.Builder<Venta>()
-//                        .setQuery(referenceVenta,Venta.class)
-//                        .build();
+////        options = new FirebaseRecyclerOptions.Builder<Venta>()
+////                        .setQuery(referenceVenta,Venta.class)
+////                        .build();
+////
+////        adapter = new FirebaseRecyclerAdapter<Venta, VentaViewHolder>(options) {
+////                    @Override
+////                    protected void onBindViewHolder(@NonNull VentaViewHolder holder, int i, @NonNull Venta venta) {
+////                        holder.img_diamante.setImageResource(R.drawable.diamantes_free);
+////                        holder.name_vendedor.setText(venta.getVendedorName());
+////                        holder.fecha_venta.setText(venta.getFechaVenta());
+////                        holder.descrip_diamantes.setText(venta.getDescripcionDiamantes());
+////                        holder.valor_venta.setText("$"+ venta.getPrecioDiamante());
+////                        holder.descripcion.setText(venta.getDescripcion());
+//////                        total = total + venta.getPrecioDiamante();
+////                        DecimalFormat df = new DecimalFormat("0.00");
+////                        total = total + Double.valueOf(df.format(venta.getPrecioDiamante()));
+////                        totalTV.setText("TOTAL = " + total);
+////
+////                    }
+////
+////                    @NonNull
+////                    @Override
+////                    public VentaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+////                        View view  = LayoutInflater.from(getApplicationContext()).inflate(R.layout.venta_diamante_main,parent,false);
+////                        return new VentaViewHolder(view);
+////                    }
+////                };
+////
+////
+////        ventaRecycler.setAdapter(adapter);
+////        adapter.startListening();
 //
-//        adapter = new FirebaseRecyclerAdapter<Venta, VentaViewHolder>(options) {
-//                    @Override
-//                    protected void onBindViewHolder(@NonNull VentaViewHolder holder, int i, @NonNull Venta venta) {
-//                        holder.img_diamante.setImageResource(R.drawable.diamantes_free);
-//                        holder.name_vendedor.setText(venta.getVendedorName());
-//                        holder.fecha_venta.setText(venta.getFechaVenta());
-//                        holder.descrip_diamantes.setText(venta.getDescripcionDiamantes());
-//                        holder.valor_venta.setText("$"+ venta.getPrecioDiamante());
-//                        holder.descripcion.setText(venta.getDescripcion());
-////                        total = total + venta.getPrecioDiamante();
-//                        DecimalFormat df = new DecimalFormat("0.00");
-//                        total = total + Double.valueOf(df.format(venta.getPrecioDiamante()));
-//                        totalTV.setText("TOTAL = " + total);
 //
-//                    }
+//        queryVeta = referenceVenta.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
 //
-//                    @NonNull
-//                    @Override
-//                    public VentaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                        View view  = LayoutInflater.from(getApplicationContext()).inflate(R.layout.venta_diamante_main,parent,false);
-//                        return new VentaViewHolder(view);
-//                    }
-//                };
+//        queryVeta.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//             Venta   venta = snapshot.getValue(Venta.class);
+//                listKeyDelete.add(snapshot.getKey());
+//                itemPost++;
+//                if (itemPost ==1){
+//                    String ventKey = snapshot.getKey();
+//                    mLastKey = ventKey;
+//                    mPrevKey = ventKey;
 //
+//                }
+//                ventaList.add(venta);
 //
-//        ventaRecycler.setAdapter(adapter);
-//        adapter.startListening();
-
-
-        queryVeta = referenceVenta.limitToLast(mCurrentPage * TOTAL_ITEMS_TO_LOAD);
-
-        queryVeta.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-             Venta   venta = snapshot.getValue(Venta.class);
-                listKeyDelete.add(snapshot.getKey());
-                itemPost++;
-                if (itemPost ==1){
-                    String ventKey = snapshot.getKey();
-                    mLastKey = ventKey;
-                    mPrevKey = ventKey;
-
-                }
-                ventaList.add(venta);
-
-                ventaAdapter.notifyDataSetChanged();
-//                total = total+venta.getPrecioDiamante();
-//                DecimalFormat df = new DecimalFormat("#.##");
-////               total = total + Double.valueOf(df.format(venta.getPrecioDiamante()));
+//                ventaAdapter.notifyDataSetChanged();
+////                total = total+venta.getPrecioDiamante();
+////                DecimalFormat df = new DecimalFormat("#.##");
+//////               total = total + Double.valueOf(df.format(venta.getPrecioDiamante()));
+////
+////               setTotal(total);
 //
-//               setTotal(total);
-
-                ventaRecycler.smoothScrollToPosition(ventaRecycler.getAdapter().getItemCount());
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Venta venta = snapshot.getValue(Venta.class);
-                String key = snapshot.getKey();
-                int index = listKeyDelete.indexOf(key);
-                try {
-                    ventaList.set(index,venta);
-                    ventaAdapter.notifyDataSetChanged();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
+//                ventaRecycler.smoothScrollToPosition(ventaRecycler.getAdapter().getItemCount());
+//
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//                Venta venta = snapshot.getValue(Venta.class);
+//                String key = snapshot.getKey();
+//                int index = listKeyDelete.indexOf(key);
+//                try {
+//                    ventaList.set(index,venta);
+//                    ventaAdapter.notifyDataSetChanged();
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
 
     private void getTotalValor(){
         new Thread(){
@@ -788,10 +790,16 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                             Venta venta = new Venta(vendedorName,vendedorUID,fechaVenta,colorValorPorVenta,colorVendedor,
                                       descripcionDiamantes,precioDiamante,descripcion,numeroVenta,idVentaRef,image);
+
+                            TimeTextM timeTextM  = new TimeTextM(fechaVenta,numeroVenta);
+                            VentaPrincipal venta1 = new VentaPrincipal(timeTextM);
+                            VentaPrincipal venta2 = new VentaPrincipal(venta);
+
                             total = total+venta.getPrecioDiamante();
                             setTotal(total);
                             listKeyDelete.add(snapshot.getKey());
-                            ventaList.add(venta);
+                            ventaList.add(venta1);
+                            ventaList.add(venta2);
                             ventaAdapter.notifyDataSetChanged();
 
                             ventaRecycler.smoothScrollToPosition(ventaAdapter.getItemCount());
@@ -856,10 +864,16 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                         Venta venta = new Venta(vendedorName,vendedorUID,fechaVenta,colorValorPorVenta,colorVendedor,
                                 descripcionDiamantes,precioDiamante,descripcion,numeroVenta,idVentaRef,image);
+
+                        TimeTextM timeTextM  = new TimeTextM(fechaVenta,numeroVenta);
+                        VentaPrincipal venta1 = new VentaPrincipal(timeTextM);
+                        VentaPrincipal venta2 = new VentaPrincipal(venta);
+
                         String key = snapshot.getKey();
                         int index = listKeyDelete.indexOf(key);
                         try {
-                            ventaList.set(index,venta);
+                            ventaList.set(index,venta1);
+                            ventaList.set(index,venta2);
                             ventaAdapter.notifyDataSetChanged();
                         }catch (Exception e){
                             e.printStackTrace();
@@ -1239,7 +1253,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
        double total=0;
         List<Integer> selectedItempost = ventaAdapter.getSelectItms();
         for (int i = selectedItempost.size()-1;i>=0; i--){
-            total = total+ventaList.get(selectedItempost.get(i)).getPrecioDiamante();
+            total = total+ventaList.get(selectedItempost.get(i)).getVenta().getPrecioDiamante();
         }
         setTotal(total);
     }
@@ -1253,7 +1267,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private void marcarVentaAnotado() {
         List<Integer> selectedItemPost = ventaAdapter.getSelectItms();
         for (int i = selectedItemPost.size()-1; i >=0 ; i--){
-            marcarAnotado(ventaAdapter.dbRef(selectedItemPost.get(i)),ventaList.get(selectedItemPost.get(i)).getVendedorUID());
+            marcarAnotado(ventaAdapter.dbRef(selectedItemPost.get(i)),ventaList.get(selectedItemPost.get(i)).getVenta().getVendedorUID());
         }
     }
 

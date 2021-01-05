@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/fecha_item"
+    >
+
+
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/background_dialog"
+        android:backgroundTint="#373636"
+        android:drawableStart="@drawable/ic_time"
+        android:fontFamily="@font/ubuntu_bold"
+        android:padding="@dimen/_5sdp"
+        android:text="Fecha"
+        android:textAlignment="center"
+
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_14ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

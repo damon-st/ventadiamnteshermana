@@ -29,7 +29,10 @@ import com.damon.ventadiamante.activitys.ImageViewer;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
 import com.damon.ventadiamante.models.ImagesDB;
+import com.damon.ventadiamante.models.TimeTextM;
 import com.damon.ventadiamante.models.Venta;
+import com.damon.ventadiamante.models.VentaPrincipal;
+import com.damon.ventadiamante.viewholder.TextTimeHolder;
 import com.damon.ventadiamante.viewholder.VentaViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -43,15 +46,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
+public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
-    List<Venta> ventaList;
+    List<VentaPrincipal> ventaList;
     Timer timer;
-    List<Venta> ventaSource;
+    List<VentaPrincipal> ventaSource;
     VentaClick ventaClick;
     VentaSingleClick ventaSingleClick;
 
+    private boolean isEquals = false;
     private SparseBooleanArray selected_items;
     private int current_selected_idx = -1;
 
@@ -64,7 +68,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
 
 
 
-    public VentaAdapter(Context context, List<Venta> ventaList,VentaSingleClick ventaSingleClick) {
+    public VentaAdapter(Context context, List<VentaPrincipal> ventaList,VentaSingleClick ventaSingleClick) {
         this.context = context;
         this.ventaList = ventaList;
         ventaSource = ventaList;
@@ -74,121 +78,144 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
 
     @NonNull
     @Override
-    public VentaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.new_venta_diamante,parent,false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view ;
         reference = FirebaseDatabase.getInstance().getReference("Venta");
         storage = FirebaseStorage.getInstance();
-        return new VentaViewHolder(view);
+        switch (viewType){
+            case 1:
+                view = LayoutInflater.from(context).inflate(R.layout.time_layout,parent,false);
+                return new TextTimeHolder(view);
+            case 2:
+                view =LayoutInflater.from(context).inflate(R.layout.new_venta_diamante,parent,false);
+                return new VentaViewHolder(view);
+            default: throw  new IllegalArgumentException();
+
+
+        }
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(@NonNull VentaViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        //animacion img
-        holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
+        Venta venta = ventaList.get(position).getVenta();
+        TimeTextM time = ventaList.get(position).getTimeTextM();
 
-        //animation container
+        if (getItemViewType(position) == 2){
+            //animacion img
+            ((VentaViewHolder)holder).img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
 
-        holder.linearLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+            //animation container
 
-        Venta venta = ventaList.get(position);
-        holder.img_diamante.setImageResource(R.drawable.diamantes_free);
-        holder.name_vendedor.setText(venta.getVendedorName());
-        holder.fecha_venta.setText(venta.getFechaVenta());
-        holder.descrip_diamantes.setText(venta.getDescripcionDiamantes());
-        holder.valor_venta.setText("$"+ venta.getPrecioDiamante());
-        holder.descripcion.setText(venta.getDescripcion());
+           // ((VentaViewHolder)holder).linearLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
 
-        holder.descripcion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData data = ClipData.newPlainText("",venta.getDescripcion());
-                clipboardManager.setPrimaryClip(data);
-                Toast.makeText(context, "Se a copiado descripcion", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        if (venta.getColorValorPorVenta().equals(""))
-            holder.respuesta_user.setVisibility(View.GONE);
-        else
-            holder.respuesta_user.setVisibility(View.VISIBLE);
-            holder.respuesta_user.setText(venta.getColorValorPorVenta());
+            ((VentaViewHolder)holder).img_diamante.setImageResource(R.drawable.diamantes_free);
+            ((VentaViewHolder)holder).name_vendedor.setText(venta.getVendedorName());
+            ((VentaViewHolder)holder).fecha_venta.setText(venta.getFechaVenta());
+            ((VentaViewHolder)holder).descrip_diamantes.setText(venta.getDescripcionDiamantes());
+            ((VentaViewHolder)holder).valor_venta.setText("$"+ venta.getPrecioDiamante());
+            ((VentaViewHolder)holder).descripcion.setText(venta.getDescripcion());
+
+            ((VentaViewHolder)holder).descripcion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData data = ClipData.newPlainText("",venta.getDescripcion());
+                    clipboardManager.setPrimaryClip(data);
+                    Toast.makeText(context, "Se a copiado descripcion", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            if (venta.getColorValorPorVenta().equals(""))
+                ((VentaViewHolder)holder).respuesta_user.setVisibility(View.GONE);
+            else
+                ((VentaViewHolder)holder).respuesta_user.setVisibility(View.VISIBLE);
+            ((VentaViewHolder)holder).respuesta_user.setText(venta.getColorValorPorVenta());
 //        System.out.println("venta "+getTotal(venta));
 
-        if (venta.getColorValorPorVenta().equals(""))
-            holder.viewCOlor.setBackgroundResource(R.drawable.background_dialog);
-        else
-            holder.viewCOlor.setBackgroundResource(R.drawable.background_contesta);
+            if (venta.getColorValorPorVenta().equals(""))
+                ((VentaViewHolder)holder).viewCOlor.setBackgroundResource(R.drawable.background_dialog);
+            else
+                ((VentaViewHolder)holder).viewCOlor.setBackgroundResource(R.drawable.background_contesta);
 
 
-        holder.layout_parent.setActivated(selected_items.get(position,false));
+            ((VentaViewHolder)holder).layout_parent.setActivated(selected_items.get(position,false));
 
-        holder.more_actions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            ((VentaViewHolder)holder).more_actions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                PopupMenu popupMenu = new PopupMenu(context,v);
-                popupMenu.inflate(R.menu.menu_options);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.respues_item){
-                            ventaSingleClick.onCLickDiamante(venta,position);
-                            popupMenu.dismiss();
-                        }else if (item.getItemId() == R.id.editar_item){
-                            Bundle bundle  =new Bundle();
-                            bundle.putSerializable("pid",venta);
-                            Intent intent = new Intent(context, CrearVentaActivity.class);
-                           // intent.putExtra("pid",venta.getIdVentaRef());
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }else if (item.getItemId() == R.id.delete_item){
-                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                            alert.setTitle("Estas Seguro de eliminar ?");
-                            alert.setMessage("Si eliminas no se podra recuperar.");
-                            alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    removeVenta(position,venta.getIdVentaRef(),venta.getImage());
-                                    dialog.dismiss();
-                                }
-                            }).setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            }).create().show();
+                    PopupMenu popupMenu = new PopupMenu(context,v);
+                    popupMenu.inflate(R.menu.menu_options);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if (item.getItemId() == R.id.respues_item){
+                                ventaSingleClick.onCLickDiamante(venta,position);
+                                popupMenu.dismiss();
+                            }else if (item.getItemId() == R.id.editar_item){
+                                Bundle bundle  =new Bundle();
+                                bundle.putSerializable("pid",venta);
+                                Intent intent = new Intent(context, CrearVentaActivity.class);
+                                // intent.putExtra("pid",venta.getIdVentaRef());
+                                intent.putExtras(bundle);
+                                context.startActivity(intent);
+                            }else if (item.getItemId() == R.id.delete_item){
+                                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                                alert.setTitle("Estas Seguro de eliminar ?");
+                                alert.setMessage("Si eliminas no se podra recuperar.");
+                                alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        removeVenta(position,venta.getIdVentaRef(),venta.getImage());
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create().show();
 
-                        }else if (item.getItemId() == R.id.imagenes_item){
-                            mostraImagenes(venta.getImage(),venta.getIdVentaRef());
+                            }else if (item.getItemId() == R.id.imagenes_item){
+                                mostraImagenes(venta.getImage(),venta.getIdVentaRef());
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                popupMenu.show();
-            }
-        });
+                    });
+                    popupMenu.show();
+                }
+            });
 
-        holder.layout_parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ventaClick == null) return;
-                ventaClick.onCLickDiamante(venta,position);
-            }
-        });
-        holder.layout_parent.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (ventaClick == null) return false;
-                ventaClick.onLongClickDiamante(venta,position);
-                return true;
-            }
-        });
+            ((VentaViewHolder)holder).layout_parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ventaClick == null) return;
+                    ventaClick.onCLickDiamante(venta,position);
+                }
+            });
+            ((VentaViewHolder)holder).layout_parent.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (ventaClick == null) return false;
+                    ventaClick.onLongClickDiamante(venta,position);
+                    return true;
+                }
+            });
 
 
-        toggleCheckedIcon(holder,position);
+            toggleCheckedIcon(((VentaViewHolder)holder),position);
+        }else if (getItemViewType(position) ==1){
+
+            ((TextTimeHolder)holder).constraintLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+            ((TextTimeHolder)holder).txt_time.setText(time.getTime());
+
+
+        }
+
+
 
 
     }
@@ -261,19 +288,21 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
     }
 
     public String dbRef(int pos){
-        return ventaList.get(pos).getIdVentaRef();
+        return ventaList.get(pos).getVenta().getIdVentaRef();
     }
 
     public List<String> pathImg(int pos){
         List<String> paths = new ArrayList<>();
-        for (ImagesDB s : ventaList.get(pos).getImage()) {
+        for (ImagesDB s : ventaList.get(pos).getVenta().getImage()) {
             paths.add(s.getImg());
         }
         return  paths;
     }
 
-
-
+    @Override
+    public int getItemViewType(int position) {
+        return ventaList.get(position).getViewType();
+    }
 
     public void clearSelections(){
         selected_items.clear();
@@ -321,21 +350,41 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder> {
                 if (searchKeywoard.trim().isEmpty()){
                     ventaList = ventaSource;
                 }else {
-                    ArrayList<Venta> temp = new ArrayList<>();
-                    for (Venta venta: ventaSource){
-                        if (buscadeMulti){
-                            if (venta.getNumeroVenta() >= desde && venta.getNumeroVenta() <= hasta){
-                                temp.add(venta);
-                                valor += venta.getPrecioDiamante();
-                            }
-                        }else {
-                            if (venta.getFechaVenta().toLowerCase().contains(searchKeywoard.toLowerCase())||venta.getDescripcion().toLowerCase().contains(searchKeywoard.toLowerCase())){
-                                temp.add(venta);
-                                valor += venta.getPrecioDiamante();
-                            }
+                    ArrayList<VentaPrincipal> temp = new ArrayList<>();
+                    ArrayList<Venta> ventas = new ArrayList<>();
+                    ArrayList<TimeTextM> time = new ArrayList<>();
+                    for (VentaPrincipal venta: ventaSource){
+
+                        if (venta.getVenta()!=null){
+                            ventas.add(venta.getVenta());
+                            System.out.println(venta.getVenta());
+                        }else if (venta.getTimeTextM() !=null){
+                            time.add(venta.getTimeTextM());
                         }
+//
 
                     }
+
+                    for (int i =0; i< ventas.size();i++){
+                        if (buscadeMulti){
+                            if (ventas.get(i).getNumeroVenta() >= desde && ventas.get(i).getNumeroVenta() <= hasta){
+                                VentaPrincipal times = new VentaPrincipal(time.get(i));
+                                VentaPrincipal principal = new VentaPrincipal(ventas.get(i));
+                                temp.add(times);
+                                temp.add(principal);
+                                valor += ventas.get(i).getPrecioDiamante();
+                            }
+                        }else {
+                            if (ventas.get(i).getFechaVenta().toLowerCase().contains(searchKeywoard.toLowerCase())||ventas.get(i).getDescripcion().toLowerCase().contains(searchKeywoard.toLowerCase())){
+                                VentaPrincipal times = new VentaPrincipal(time.get(i));
+                                VentaPrincipal principal = new VentaPrincipal(ventas.get(i));
+                                temp.add(times);
+                                temp.add(principal);
+                                valor += ventas.get(i).getPrecioDiamante();
+                            }
+                        }
+                    }
+
                     ventaList = temp;
                 }
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
