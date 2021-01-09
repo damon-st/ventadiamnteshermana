@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -55,6 +56,7 @@ import com.damon.ventadiamante.notifications.Data;
 import com.damon.ventadiamante.notifications.MyResponse;
 import com.damon.ventadiamante.notifications.Sender;
 import com.damon.ventadiamante.notifications.Token;
+import com.damon.ventadiamante.viewholder.MyItemTouchHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -192,6 +194,10 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         ventaAdapter = new VentaAdapter(this,ventaList,this);
         getTotalValor();
 
+        ItemTouchHelper.Callback callback = new MyItemTouchHelper(ventaAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        ventaAdapter.setTouchHelper(itemTouchHelper);
+        itemTouchHelper.attachToRecyclerView(ventaRecycler);
         ventaRecycler.setAdapter(ventaAdapter);
 
 //        LayoutAnimationController controller  =AnimationUtils.loadLayoutAnimation(this,R.anim.layout_slide_right);
@@ -1124,6 +1130,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             nombreComentario = snapshot.child("name").getValue().toString();
+                            ventaAdapter.setNombreComentario(nombreComentario);
                         }
                     }
 

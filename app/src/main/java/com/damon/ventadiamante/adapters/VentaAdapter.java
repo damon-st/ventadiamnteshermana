@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,17 +22,20 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.activitys.CrearVentaActivity;
 import com.damon.ventadiamante.activitys.ImageViewer;
+import com.damon.ventadiamante.interfaces.ItemTouchHelperAdapter;
 import com.damon.ventadiamante.interfaces.VentaClick;
 import com.damon.ventadiamante.interfaces.VentaSingleClick;
 import com.damon.ventadiamante.models.ImagesDB;
 import com.damon.ventadiamante.models.TimeTextM;
 import com.damon.ventadiamante.models.Venta;
 import com.damon.ventadiamante.models.VentaPrincipal;
+import com.damon.ventadiamante.viewholder.MyItemTouchHelper;
 import com.damon.ventadiamante.viewholder.TextTimeHolder;
 import com.damon.ventadiamante.viewholder.VentaViewHolder;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,11 +46,13 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+    implements ItemTouchHelperAdapter {
 
     Context context;
     List<VentaPrincipal> ventaList;
@@ -61,6 +67,14 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private DatabaseReference reference;
     private FirebaseStorage storage;
+
+
+    private ItemTouchHelper mTouchHelper;
+
+    public void setTouchHelper(ItemTouchHelper touchHelper){
+        this.mTouchHelper = touchHelper;
+    }
+
 
     public void setVentaClick(VentaClick ventaClick){
         this.ventaClick = ventaClick;
@@ -88,7 +102,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 return new TextTimeHolder(view);
             case 2:
                 view =LayoutInflater.from(context).inflate(R.layout.new_venta_diamante,parent,false);
-                return new VentaViewHolder(view);
+                return new VentaViewHolder(view,mTouchHelper);
             default: throw  new IllegalArgumentException();
 
 
@@ -209,7 +223,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             toggleCheckedIcon(((VentaViewHolder)holder),position);
         }else if (getItemViewType(position) ==1){
 
-            ((TextTimeHolder)holder).constraintLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
+          //  ((TextTimeHolder)holder).constraintLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
             ((TextTimeHolder)holder).txt_time.setText(time.getTime());
 
 
@@ -404,5 +418,74 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             timer.cancel();
             valor=0;
         }
+    }
+
+    @Override
+    public void onItemMove(int fromPositon, int toPosition) {
+        Vibrator v = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(400);
+        VentaPrincipal venta = ventaList.get(fromPositon);
+        ventaList.remove(venta);
+        ventaList.add(toPosition,venta);
+        notifyItemMoved(fromPositon,toPosition);
+
+    }
+
+    @Override
+    public void onItemSwiped(int position,int direccion) {
+        Vibrator v = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+        System.out.println("position " + position);
+
+        if (ventaList.get(position).getVenta() != null){
+            if (direccion == 16){
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                alertDialog.setTitle("Eliminar esta venta");
+                alertDialog.setMessage("Estas seguro de eliminar esta venta nose podra recuperar nunca jamas ");
+                alertDialog.setPositiveButton("si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeVenta(position,ventaList.get(position).getVenta().getIdVentaRef(),ventaList.get(position).getVenta().getImage());
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }else if (direccion == 32){
+
+                System.out.println("Nombre comentario "  + getNombreComentario());
+
+                String comentario =  getNombreComentario() + " dijo " + "\n "+ " anotado \uD83D\uDE03";
+
+                HashMap<String,Object> hashMap = new HashMap<>();
+                hashMap.put("colorValorPorVenta",comentario);
+
+                reference.child(ventaList.get(position).getVenta().getIdVentaRef()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        try {
+                          //  notifyItemChanged(position);
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                });
+
+            }
+        }
+    }
+
+    String nombreComentario;
+
+    public void setNombreComentario(String nombreComentario) {
+        this.nombreComentario = nombreComentario;
+    }
+
+    private String getNombreComentario(){
+        return nombreComentario;
     }
 }

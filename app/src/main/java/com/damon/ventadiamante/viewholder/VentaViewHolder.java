@@ -1,16 +1,20 @@
 package com.damon.ventadiamante.viewholder;
 
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ventadiamante.R;
 
-public class VentaViewHolder extends RecyclerView.ViewHolder{
+public class VentaViewHolder extends RecyclerView.ViewHolder implements
+        GestureDetector.OnGestureListener,View.OnTouchListener{
 
     public ImageView img_diamante,img_selected;
     public TextView name_vendedor,fecha_venta,descrip_diamantes,valor_venta,descripcion,respuesta_user;
@@ -19,8 +23,13 @@ public class VentaViewHolder extends RecyclerView.ViewHolder{
 
     public LinearLayout linearLayout;
 
-    public VentaViewHolder(@NonNull View itemView) {
+    GestureDetector mGestureDetector;
+
+    ItemTouchHelper touchHelper;
+
+    public VentaViewHolder(@NonNull View itemView, ItemTouchHelper touchHelper) {
         super(itemView);
+
 
         img_diamante = itemView.findViewById(R.id.image_diamante);
         name_vendedor = itemView.findViewById(R.id.nombre_vendedor);
@@ -35,5 +44,45 @@ public class VentaViewHolder extends RecyclerView.ViewHolder{
         more_actions = itemView.findViewById(R.id.more_actions);
 
         linearLayout =itemView.findViewById(R.id.contenedor);
+
+        this.touchHelper = touchHelper;
+        mGestureDetector = new GestureDetector(itemView.getContext(),this);
+        itemView.setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        touchHelper.startDrag(this);
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        mGestureDetector.onTouchEvent(event);
+        return true;
     }
 }
