@@ -7,21 +7,32 @@
         android:id="@+id/exitApp"
         android:title="Cerrar Sesion"
         android:icon="@drawable/ic_exit"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always"
         android:iconTint="@color/colorIcons"/>
     <item
         android:id="@+id/delete_all"
         android:title="Eliminar ventas"
         android:icon="@drawable/ic_delete"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always"
         android:iconTint="@color/colorDelete"/>
 
     <item
         android:id="@+id/refresh_page"
-        android:title="Marcar mo visto"
+        android:title="Marcar como visto"
         android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="always"
         android:iconTint="@color/colorAccent"/>
 
+
+    <group
+        android:visible="true"
+
+        >
+        <item android:title="Cambiar de tema"
+            android:id="@+id/cambiar_tema"
+            />
+
+
+    </group>
 
 </menu>

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private FirebaseAuth mAuth;
     private ImageView createVenta,delete_all,refresh_page,calendario_btn,clear_text,ordenar_porFecha;
     VentaAdapter ventaAdapter;
-    List<VentaPrincipal> ventaList = new ArrayList<>();
+    List<Venta> ventaList = new ArrayList<>();
     RecyclerView ventaRecycler;
     private DatabaseReference referenceVenta,refUser;
 //    FirebaseRecyclerOptions<Venta> options;
@@ -324,14 +325,63 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
 
         getTotalCountsVentas();
+
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        boolean mostrarDialogo = preferences.getBoolean("guardado",false);
+        if (!mostrarDialogo){
+            ComprobarTema();
+        }
+
+
+
+
     }
+
+    private void ComprobarTema(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Escoje el tema");
+        dialog.setPositiveButton("Tema Nuevo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                crearTema("nuevo");
+                guardarDialogoTema();
+                dialog.cancel();
+            }
+        }).setNegativeButton("Tema Antiguo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                crearTema("antiguo");
+                guardarDialogoTema();
+                dialog.cancel();
+            }
+        }).create().show();
+    }
+
+    private void guardarDialogoTema(){
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("guardado",true);
+        editor.apply();
+    }
+
+
+    private void crearTema(String tema){
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("tema",tema);
+        editor.apply();
+        recreate();
+    }
+
 
     private void getTotalCountsVentas() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (ventaAdapter.getItemCount() != 0){
-                    count_ventas.setText("N° " + ventaAdapter.getItemCount()/2);
+                    count_ventas.setText("N° " + ventaAdapter.getItemCount());
                 }
             }
         },1000);
@@ -813,15 +863,10 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                             Venta venta = new Venta(vendedorName,vendedorUID,fechaVenta,colorValorPorVenta,colorVendedor,
                                       descripcionDiamantes,precioDiamante,descripcion,numeroVenta,idVentaRef,image);
 
-                            TimeTextM timeTextM  = new TimeTextM(fechaVenta,numeroVenta);
-                            VentaPrincipal venta1 = new VentaPrincipal(timeTextM);
-                            VentaPrincipal venta2 = new VentaPrincipal(venta);
-
                             total = total+venta.getPrecioDiamante();
                             setTotal(total);
                             listKeyDelete.add(snapshot.getKey());
-                            ventaList.add(venta1);
-                            ventaList.add(venta2);
+                            ventaList.add(venta);
                             ventaAdapter.notifyDataSetChanged();
 
                             ventaRecycler.smoothScrollToPosition(ventaAdapter.getItemCount());
@@ -887,15 +932,10 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                         Venta venta = new Venta(vendedorName,vendedorUID,fechaVenta,colorValorPorVenta,colorVendedor,
                                 descripcionDiamantes,precioDiamante,descripcion,numeroVenta,idVentaRef,image);
 
-                        TimeTextM timeTextM  = new TimeTextM(fechaVenta,numeroVenta);
-                        VentaPrincipal venta1 = new VentaPrincipal(timeTextM);
-                        VentaPrincipal venta2 = new VentaPrincipal(venta);
-
                         String key = snapshot.getKey();
                         int index = listKeyDelete.indexOf(key);
                         try {
-                            ventaList.set(index,venta1);
-                            ventaList.set(index,venta2);
+                            ventaList.set(index,venta);
                             ventaAdapter.notifyDataSetChanged();
                         }catch (Exception e){
                             e.printStackTrace();
@@ -1276,8 +1316,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
        double total=0;
         List<Integer> selectedItempost = ventaAdapter.getSelectItms();
         for (int i = selectedItempost.size()-1;i>=0; i--){
-            if (ventaList.get(selectedItempost.get(i)).getVenta()!=null){
-                total = total+ventaList.get(selectedItempost.get(i)).getVenta().getPrecioDiamante();
+            if (ventaList.get(selectedItempost.get(i))!=null){
+                total = total+ventaList.get(selectedItempost.get(i)).getPrecioDiamante();
             }
         }
         setTotal(total);
@@ -1292,8 +1332,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     private void marcarVentaAnotado() {
         List<Integer> selectedItemPost = ventaAdapter.getSelectItms();
         for (int i = selectedItemPost.size()-1; i >=0 ; i--){
-            if(ventaList.get(selectedItemPost.get(i)).getVenta() !=null)
-            marcarAnotado(ventaAdapter.dbRef(selectedItemPost.get(i)),ventaList.get(selectedItemPost.get(i)).getVenta().getVendedorUID());
+            if(ventaList.get(selectedItemPost.get(i)) !=null)
+            marcarAnotado(ventaAdapter.dbRef(selectedItemPost.get(i)),ventaList.get(selectedItemPost.get(i)).getVendedorUID());
         }
     }
 
@@ -1367,6 +1407,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
             finish();
+            return true;
+        }else if (id == R.id.cambiar_tema){
+            ComprobarTema();
             return true;
         }
         return super.onOptionsItemSelected(item);

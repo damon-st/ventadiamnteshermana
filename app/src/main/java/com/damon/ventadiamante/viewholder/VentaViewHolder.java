@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,9 +18,10 @@ public class VentaViewHolder extends RecyclerView.ViewHolder implements
         GestureDetector.OnGestureListener,View.OnTouchListener{
 
     public ImageView img_diamante,img_selected;
-    public TextView name_vendedor,fecha_venta,descrip_diamantes,valor_venta,descripcion,respuesta_user;
+    public TextView name_vendedor,fecha_venta,descrip_diamantes,valor_venta,descripcion,respuesta_user,time_new;
     public ImageView viewCOlor,more_actions;
     public View layout_parent;
+    public ConstraintLayout constraintTime;
 
     public LinearLayout linearLayout;
 
@@ -42,8 +44,10 @@ public class VentaViewHolder extends RecyclerView.ViewHolder implements
         layout_parent = (View) itemView.findViewById(R.id.vista_parent);
         img_selected = itemView.findViewById(R.id.img_selected);
         more_actions = itemView.findViewById(R.id.more_actions);
+        time_new = itemView.findViewById(R.id.text_time);
 
         linearLayout =itemView.findViewById(R.id.contenedor);
+        constraintTime = itemView.findViewById(R.id.fecha_item);
 
         this.touchHelper = touchHelper;
         mGestureDetector = new GestureDetector(itemView.getContext(),this);

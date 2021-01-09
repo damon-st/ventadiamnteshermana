@@ -1,12 +1,14 @@
 package com.damon.ventadiamante.adapters;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -51,13 +53,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
     implements ItemTouchHelperAdapter {
 
-    Context context;
-    List<VentaPrincipal> ventaList;
+    Activity context;
+    List<Venta> ventaList;
     Timer timer;
-    List<VentaPrincipal> ventaSource;
+    List<Venta> ventaSource;
     VentaClick ventaClick;
     VentaSingleClick ventaSingleClick;
 
@@ -82,7 +84,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
 
-    public VentaAdapter(Context context, List<VentaPrincipal> ventaList,VentaSingleClick ventaSingleClick) {
+    public VentaAdapter(Activity context, List<Venta> ventaList,VentaSingleClick ventaSingleClick) {
         this.context = context;
         this.ventaList = ventaList;
         ventaSource = ventaList;
@@ -92,47 +94,52 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public VentaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view ;
         reference = FirebaseDatabase.getInstance().getReference("Venta");
         storage = FirebaseStorage.getInstance();
-        switch (viewType){
-            case 1:
-                view = LayoutInflater.from(context).inflate(R.layout.time_layout,parent,false);
-                return new TextTimeHolder(view);
-            case 2:
-                view =LayoutInflater.from(context).inflate(R.layout.new_venta_diamante,parent,false);
-                return new VentaViewHolder(view,mTouchHelper);
-            default: throw  new IllegalArgumentException();
-
-
-        }
+        view =LayoutInflater.from(context).inflate(R.layout.new_venta_diamante,parent,false);
+        return new VentaViewHolder(view,mTouchHelper);
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VentaViewHolder holder, int position) {
 
-        Venta venta = ventaList.get(position).getVenta();
-        TimeTextM time = ventaList.get(position).getTimeTextM();
-
-        if (getItemViewType(position) == 2){
+        Venta venta = ventaList.get(position);
             //animacion img
-            ((VentaViewHolder)holder).img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
+        holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
 
             //animation container
 
            // ((VentaViewHolder)holder).linearLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
 
 
-            ((VentaViewHolder)holder).img_diamante.setImageResource(R.drawable.diamantes_free);
-            ((VentaViewHolder)holder).name_vendedor.setText(venta.getVendedorName());
-           // ((VentaViewHolder)holder).fecha_venta.setText(venta.getFechaVenta());
-            ((VentaViewHolder)holder).descrip_diamantes.setText(venta.getDescripcionDiamantes());
-            ((VentaViewHolder)holder).valor_venta.setText("$"+ venta.getPrecioDiamante());
-            ((VentaViewHolder)holder).descripcion.setText(venta.getDescripcion());
+        holder.img_diamante.setImageResource(R.drawable.diamantes_free);
+        holder.name_vendedor.setText(venta.getVendedorName());
 
-            ((VentaViewHolder)holder).descripcion.setOnClickListener(new View.OnClickListener() {
+        SharedPreferences preferences = context.getPreferences(Context.MODE_PRIVATE);
+        String tema = preferences.getString("tema","nuevo");
+
+        if (tema.equals("antiguo")){
+            holder.constraintTime.setVisibility(View.GONE);
+            holder.fecha_venta.setVisibility(View.VISIBLE);
+            holder.fecha_venta.setText(venta.getFechaVenta());
+        }else {
+            holder.fecha_venta.setVisibility(View.GONE);
+            holder.constraintTime.setVisibility(View.VISIBLE);
+            holder.time_new.setText(venta.getFechaVenta());
+        }
+
+        // ((VentaViewHolder)holder).fecha_venta.setText(venta.getFechaVenta());
+        holder.time_new.setText(venta.getFechaVenta());
+
+
+        holder.descrip_diamantes.setText(venta.getDescripcionDiamantes());
+        holder.valor_venta.setText("$"+ venta.getPrecioDiamante());
+        holder.descripcion.setText(venta.getDescripcion());
+
+        holder.descripcion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -143,21 +150,21 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
 
             if (venta.getColorValorPorVenta().equals(""))
-                ((VentaViewHolder)holder).respuesta_user.setVisibility(View.GONE);
+                holder.respuesta_user.setVisibility(View.GONE);
             else
-                ((VentaViewHolder)holder).respuesta_user.setVisibility(View.VISIBLE);
-            ((VentaViewHolder)holder).respuesta_user.setText(venta.getColorValorPorVenta());
+                holder.respuesta_user.setVisibility(View.VISIBLE);
+        holder.respuesta_user.setText(venta.getColorValorPorVenta());
 //        System.out.println("venta "+getTotal(venta));
 
             if (venta.getColorValorPorVenta().equals(""))
-                ((VentaViewHolder)holder).viewCOlor.setBackgroundResource(R.drawable.background_dialog);
+                holder.viewCOlor.setBackgroundResource(R.drawable.background_dialog);
             else
-                ((VentaViewHolder)holder).viewCOlor.setBackgroundResource(R.drawable.background_contesta);
+                holder.viewCOlor.setBackgroundResource(R.drawable.background_contesta);
 
 
-            ((VentaViewHolder)holder).layout_parent.setActivated(selected_items.get(position,false));
+        holder.layout_parent.setActivated(selected_items.get(position,false));
 
-            ((VentaViewHolder)holder).more_actions.setOnClickListener(new View.OnClickListener() {
+        holder.more_actions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -203,14 +210,14 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
-            ((VentaViewHolder)holder).layout_parent.setOnClickListener(new View.OnClickListener() {
+        holder.layout_parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (ventaClick == null) return;
                     ventaClick.onCLickDiamante(venta,position);
                 }
             });
-            ((VentaViewHolder)holder).layout_parent.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.layout_parent.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     if (ventaClick == null) return false;
@@ -220,17 +227,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
 
 
-            toggleCheckedIcon(((VentaViewHolder)holder),position);
-        }else if (getItemViewType(position) ==1){
-
-          //  ((TextTimeHolder)holder).constraintLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
-            ((TextTimeHolder)holder).txt_time.setText(time.getTime());
-
-
-        }
-
-
-
+            toggleCheckedIcon(holder,position);
 
     }
 
@@ -302,12 +299,12 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public String dbRef(int pos){
-        return ventaList.get(pos).getVenta().getIdVentaRef();
+        return ventaList.get(pos).getIdVentaRef();
     }
 
     public List<String> pathImg(int pos){
         List<String> paths = new ArrayList<>();
-        for (ImagesDB s : ventaList.get(pos).getVenta().getImage()) {
+        for (ImagesDB s : ventaList.get(pos).getImage()) {
             paths.add(s.getImg());
         }
         return  paths;
@@ -315,7 +312,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return ventaList.get(position).getViewType();
+        return 2;
     }
 
     public void clearSelections(){
@@ -364,41 +361,21 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (searchKeywoard.trim().isEmpty()){
                     ventaList = ventaSource;
                 }else {
-                    ArrayList<VentaPrincipal> temp = new ArrayList<>();
-                    ArrayList<Venta> ventas = new ArrayList<>();
-                    ArrayList<TimeTextM> time = new ArrayList<>();
-                    for (VentaPrincipal venta: ventaSource){
-
-                        if (venta.getVenta()!=null){
-                            ventas.add(venta.getVenta());
-                            System.out.println(venta.getVenta());
-                        }else if (venta.getTimeTextM() !=null){
-                            time.add(venta.getTimeTextM());
-                        }
-//
-
-                    }
-
-                    for (int i =0; i< ventas.size();i++){
+                    ArrayList<Venta> temp = new ArrayList<>();
+                    for (Venta venta: ventaSource){
                         if (buscadeMulti){
-                            if (ventas.get(i).getNumeroVenta() >= desde && ventas.get(i).getNumeroVenta() <= hasta){
-                                VentaPrincipal times = new VentaPrincipal(time.get(i));
-                                VentaPrincipal principal = new VentaPrincipal(ventas.get(i));
-                                temp.add(times);
-                                temp.add(principal);
-                                valor += ventas.get(i).getPrecioDiamante();
+                            if (venta.getNumeroVenta() >= desde && venta.getNumeroVenta() <= hasta){
+                                temp.add(venta);
+                                valor += venta.getPrecioDiamante();
                             }
                         }else {
-                            if (ventas.get(i).getFechaVenta().toLowerCase().contains(searchKeywoard.toLowerCase())||ventas.get(i).getDescripcion().toLowerCase().contains(searchKeywoard.toLowerCase())){
-                                VentaPrincipal times = new VentaPrincipal(time.get(i));
-                                VentaPrincipal principal = new VentaPrincipal(ventas.get(i));
-                                temp.add(times);
-                                temp.add(principal);
-                                valor += ventas.get(i).getPrecioDiamante();
+                            if (venta.getFechaVenta().toLowerCase().contains(searchKeywoard.toLowerCase())||venta.getDescripcion().toLowerCase().contains(searchKeywoard.toLowerCase())){
+                                temp.add(venta);
+                                valor += venta.getPrecioDiamante();
                             }
                         }
-                    }
 
+                    }
                     ventaList = temp;
                 }
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -424,7 +401,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onItemMove(int fromPositon, int toPosition) {
         Vibrator v = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(400);
-        VentaPrincipal venta = ventaList.get(fromPositon);
+        Venta venta = ventaList.get(fromPositon);
         ventaList.remove(venta);
         ventaList.add(toPosition,venta);
         notifyItemMoved(fromPositon,toPosition);
@@ -437,7 +414,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         v.vibrate(500);
         System.out.println("position " + position);
 
-        if (ventaList.get(position).getVenta() != null){
+        if (ventaList.get(position) != null){
             if (direccion == 16){
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
@@ -446,7 +423,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 alertDialog.setPositiveButton("si", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        removeVenta(position,ventaList.get(position).getVenta().getIdVentaRef(),ventaList.get(position).getVenta().getImage());
+                        removeVenta(position,ventaList.get(position).getIdVentaRef(),ventaList.get(position).getImage());
                         dialog.dismiss();
                     }
                 }).setNegativeButton("no", new DialogInterface.OnClickListener() {
@@ -464,7 +441,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 HashMap<String,Object> hashMap = new HashMap<>();
                 hashMap.put("colorValorPorVenta",comentario);
 
-                reference.child(ventaList.get(position).getVenta().getIdVentaRef()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                reference.child(ventaList.get(position).getIdVentaRef()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         try {
