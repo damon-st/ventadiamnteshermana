@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -1026,7 +1027,28 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
 
     @Override
     public void onBackPressed() {
-        finish();
+
+        if (fotosList.size() > 0 || !TextUtils.isEmpty(diamante_texto)){
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Estas creando la venta");
+            alertDialog.setMessage("si sales se perdera lo que tengas anotado estas seguro de salir ?");
+            alertDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    finish();
+                }
+            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+        }else {
+            super.onBackPressed();
+            finish();
+        }
+
     }
 
 
