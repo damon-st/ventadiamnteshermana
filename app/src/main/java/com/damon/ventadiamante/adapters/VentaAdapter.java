@@ -108,7 +108,6 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
         Venta venta = ventaList.get(position);
             //animacion img
-        holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
 
             //animation container
 
@@ -126,6 +125,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
             holder.fecha_venta.setVisibility(View.VISIBLE);
             holder.fecha_venta.setText(venta.getFechaVenta());
         }else {
+            holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
             holder.fecha_venta.setVisibility(View.GONE);
             holder.constraintTime.setVisibility(View.VISIBLE);
             holder.time_new.setText(venta.getFechaVenta());
