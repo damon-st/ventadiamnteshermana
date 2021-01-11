@@ -939,6 +939,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                             ventaAdapter.notifyDataSetChanged();
                         }catch (Exception e){
                             e.printStackTrace();
+                            recreate();
                         }
                     }
 
@@ -1354,15 +1355,17 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         List<Integer> selectedItemPost = ventaAdapter.getSelectItms();
 //        ArrayList<String> data = new ArrayList<>();
         for (int i = selectedItemPost.size()-1; i >=0 ; i--){
-            if (ventaAdapter.pathImg(selectedItemPost.get(i)) != null){
-                try {
-                    EliminarImage(ventaAdapter.pathImg(selectedItemPost.get(i)));
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (ventaList.get(selectedItemPost.get(i))!=null) {
+                if (ventaAdapter.pathImg(selectedItemPost.get(i)) != null) {
+                    try {
+                        EliminarImage(ventaAdapter.pathImg(selectedItemPost.get(i)));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+                deleteForDB(ventaAdapter.dbRef(selectedItemPost.get(i)));
+                ventaAdapter.deleteVenta(selectedItemPost.get(i));
             }
-            deleteForDB(ventaAdapter.dbRef(selectedItemPost.get(i)));
-            ventaAdapter.deleteVenta(selectedItemPost.get(i));
         }
     }
 
