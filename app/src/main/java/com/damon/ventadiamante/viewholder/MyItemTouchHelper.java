@@ -72,10 +72,16 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
 
         new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                .addSwipeLeftBackgroundColor(R.color.colorDelete)
+                .addSwipeLeftBackgroundColor(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorDelete))
                 .addSwipeLeftActionIcon(R.drawable.ic_delete)
-                .addSwipeRightBackgroundColor(R.color.colorAccent)
+                .setSwipeLeftActionIconTint(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorWhite))
+                .addSwipeRightBackgroundColor(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorAccent))
                 .addSwipeRightActionIcon(R.drawable.ic_selected)
+                .setSwipeRightActionIconTint(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorWhite))
+                .addSwipeLeftLabel("Eliminar")
+                .setSwipeLeftLabelColor(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorWhite))
+                .addSwipeRightLabel("Marcar Visto")
+                .setSwipeRightLabelColor(ContextCompat.getColor(viewHolder.itemView.getContext(),R.color.colorWhite))
                 .create()
                 .decorate();
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);

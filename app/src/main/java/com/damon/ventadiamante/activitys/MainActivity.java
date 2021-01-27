@@ -384,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     count_ventas.setText("N° " + ventaAdapter.getItemCount());
                 }
             }
-        },1000);
+        },1500);
     }
 
     private void enableActionMode(int position) {
