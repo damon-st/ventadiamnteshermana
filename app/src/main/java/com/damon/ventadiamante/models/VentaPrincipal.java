@@ -7,7 +7,7 @@ public class VentaPrincipal {
     private int viewType;
 
 
-    public VentaPrincipal(Venta venta) {
+    public VentaPrincipal(Venta venta){
         this.venta = venta;
         viewType = 2;
     }

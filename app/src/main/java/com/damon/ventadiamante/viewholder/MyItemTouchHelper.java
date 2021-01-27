@@ -1,5 +1,6 @@
 package com.damon.ventadiamante.viewholder;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.interfaces.ItemTouchHelperAdapter;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class MyItemTouchHelper extends ItemTouchHelper.Callback {
 
@@ -63,5 +66,18 @@ public class MyItemTouchHelper extends ItemTouchHelper.Callback {
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         System.out.println("DIRECCION" + direction);
         mAdpater.onItemSwiped(viewHolder.getAdapterPosition(),direction);
+    }
+
+    @Override
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+        new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                .addSwipeLeftBackgroundColor(R.color.colorDelete)
+                .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                .addSwipeRightBackgroundColor(R.color.colorAccent)
+                .addSwipeRightActionIcon(R.drawable.ic_selected)
+                .create()
+                .decorate();
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 }
