@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     btn_scroll_down.setVisibility(View.GONE);
                 }else {
                     btn_scroll_down.setVisibility(View.VISIBLE);
-                    btn_scroll_down.startAnimation(animationUtils);
+                //    btn_scroll_down.startAnimation(animationUtils);
                 }
 
             }
@@ -326,11 +326,17 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         getTotalCountsVentas();
 
-        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-        boolean mostrarDialogo = preferences.getBoolean("guardado",false);
-        if (!mostrarDialogo){
-            ComprobarTema();
-        }
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+                boolean mostrarDialogo = preferences.getBoolean("guardado",false);
+                if (!mostrarDialogo){
+                    ComprobarTema();
+                }
+            }
+        }.start();
 
 
 
@@ -495,24 +501,37 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
     private void setData(){
-        final Calendar newCalendar = Calendar.getInstance();
-        DatePickerDialog StartTime = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+       new Thread()
+       {
+           @Override
+           public void run() {
+               super.run();
+               final Calendar newCalendar = Calendar.getInstance();
+               DatePickerDialog StartTime = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                   public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                       Calendar newDate = Calendar.getInstance();
+                       newDate.set(year, monthOfYear, dayOfMonth);
 //                inputSearch.setText(dateFormatter.format(newDate.getTime()));
-                inputSearch.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy ")
-                        .format(newDate.getTime()));
-            }
+                       inputSearch.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy ")
+                               .format(newDate.getTime()));
+                   }
 
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+               }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-        calendario_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StartTime.show();
-            }
-        });
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       calendario_btn.setOnClickListener(new View.OnClickListener() {
+                           @Override
+                           public void onClick(View v) {
+                               StartTime.show();
+                           }
+                       });
+                   }
+               });
+
+           }
+       }.start();
     }
 
 
