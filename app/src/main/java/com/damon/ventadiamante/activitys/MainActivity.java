@@ -501,11 +501,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
     private void setData(){
-       new Thread()
-       {
-           @Override
-           public void run() {
-               super.run();
+
                final Calendar newCalendar = Calendar.getInstance();
                DatePickerDialog StartTime = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -518,20 +514,12 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       calendario_btn.setOnClickListener(new View.OnClickListener() {
-                           @Override
-                           public void onClick(View v) {
-                               StartTime.show();
-                           }
-                       });
-                   }
-               });
-
-           }
-       }.start();
+        calendario_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StartTime.show();
+            }
+        });
     }
 
 
