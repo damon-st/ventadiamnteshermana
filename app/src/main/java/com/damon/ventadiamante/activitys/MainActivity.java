@@ -329,16 +329,22 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         getTotalCountsVentas();
 
-      try {
-          SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-          boolean mostrarDialogo = preferences.getBoolean("guardado",false);
-          if (!mostrarDialogo){
-              ComprobarTema();
-          }
-      }catch (Exception e){
-          e.printStackTrace();
-          Toast.makeText(this, "Error al cargar datos del tema"+e.getMessage(), Toast.LENGTH_SHORT).show();
-      }
+
+        new HandlerExecutor(getMainLooper()).execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+                    boolean mostrarDialogo = preferences.getBoolean("guardado",false);
+                    if (!mostrarDialogo){
+                        ComprobarTema();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "Error al cargar datos del tema"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 
@@ -392,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     count_ventas.setText("N° " + ventaAdapter.getItemCount());
                 }
             }
-        },1500);
+        },2700);
     }
 
     private void enableActionMode(int position) {
