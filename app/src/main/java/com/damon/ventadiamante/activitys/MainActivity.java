@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ import com.damon.ventadiamante.notifications.MyResponse;
 import com.damon.ventadiamante.notifications.Sender;
 import com.damon.ventadiamante.notifications.Token;
 import com.damon.ventadiamante.viewholder.MyItemTouchHelper;
+import com.google.android.gms.common.util.concurrent.HandlerExecutor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -327,17 +329,16 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         getTotalCountsVentas();
 
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-                boolean mostrarDialogo = preferences.getBoolean("guardado",false);
-                if (!mostrarDialogo){
-                    ComprobarTema();
-                }
-            }
-        }.start();
+      try {
+          SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+          boolean mostrarDialogo = preferences.getBoolean("guardado",false);
+          if (!mostrarDialogo){
+              ComprobarTema();
+          }
+      }catch (Exception e){
+          e.printStackTrace();
+          Toast.makeText(this, "Error al cargar datos del tema"+e.getMessage(), Toast.LENGTH_SHORT).show();
+      }
 
 
 
@@ -1030,11 +1031,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
     private void updateToken(){
-
-        new Thread(){
+        new HandlerExecutor(Looper.getMainLooper()).execute(new Runnable() {
             @Override
             public void run() {
-                super.run();
 
                 FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -1050,9 +1049,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     }
                 });
             }
-        }.start();
-
-
+        });
     }
 
     private void setTotal(double total){
