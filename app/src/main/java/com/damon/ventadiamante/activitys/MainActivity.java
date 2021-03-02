@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -806,11 +807,10 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 //    }
 
     private void getTotalValor(){
-        new Thread(){
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                super.run();
-                referenceVenta.addChildEventListener(new ChildEventListener() {
+           referenceVenta.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
@@ -1026,7 +1026,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                     }
                 });
             }
-        }.start();
+        });
     }
 
     private void updateToken(){
