@@ -200,18 +200,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if (firebaseUser !=null){
-            if (networkInfo != null && networkInfo.isConnected()){
+
+        if ( networkInfo != null && networkInfo.isConnected() ){
+            if (firebaseUser !=null){
                 updateToken();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            }else {
-                Intent intent = new Intent(LoginActivity.this, ConexionError.class);
-                startActivity(intent);
-                finish();
             }
-
+        }else {
+            Intent intent = new Intent(LoginActivity.this, ConexionError.class);
+            startActivity(intent);
+            finish();
         }
 
 

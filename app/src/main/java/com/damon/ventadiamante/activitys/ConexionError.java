@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.damon.ventadiamante.R;
 
@@ -15,6 +16,7 @@ public class ConexionError extends AppCompatActivity {
 
     NetworkInfo networkInfo;
 
+    private int numIntentos = 3;
     private Button reintentar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +33,19 @@ public class ConexionError extends AppCompatActivity {
     }
 
     private void reintentarConexcion() {
-
-        if (networkInfo !=null && networkInfo.isConnected()){
+        numIntentos--;
+        if (numIntentos ==0){
             startActivity(new Intent(ConexionError.this,LoginActivity.class));
             finish();
+
         }else {
-            recreate();
+            if (networkInfo !=null && networkInfo.isConnected()){
+                startActivity(new Intent(ConexionError.this,LoginActivity.class));
+                finish();
+            }
         }
+
+        Toast.makeText(this, "Numero de Intentos antes cargar datos de cache N°" + numIntentos, Toast.LENGTH_SHORT).show();
     }
 
 }

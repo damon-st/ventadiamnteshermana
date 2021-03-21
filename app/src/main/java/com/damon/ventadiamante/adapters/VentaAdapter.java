@@ -52,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
 
 public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
     implements ItemTouchHelperAdapter {
@@ -114,7 +115,12 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
            // ((VentaViewHolder)holder).linearLayout.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_scale_animation));
 
 
-        holder.img_diamante.setImageResource(R.drawable.diamantes_free);
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                holder.img_diamante.setImageResource(R.drawable.diamantes_free);
+            }
+        });
         holder.name_vendedor.setText(venta.getVendedorName());
 
         SharedPreferences preferences = context.getPreferences(Context.MODE_PRIVATE);
@@ -202,6 +208,8 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
                             }else if (item.getItemId() == R.id.imagenes_item){
                                 mostraImagenes(venta.getImage(),venta.getIdVentaRef());
+                            }else if (item.getItemId() == R.id.quitar_anotado){
+                                quitarAnotado(venta.getIdVentaRef(),position);
                             }
                             return false;
                         }
@@ -229,6 +237,17 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
             toggleCheckedIcon(holder,position);
 
+    }
+
+    private void quitarAnotado(String idVentaRef,int position) {
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("colorValorPorVenta","");
+        reference.child(idVentaRef).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                notifyItemChanged(position);
+            }
+        });
     }
 
 

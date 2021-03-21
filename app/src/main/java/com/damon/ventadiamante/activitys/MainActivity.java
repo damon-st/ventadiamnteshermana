@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         animationUtils = AnimationUtils.loadAnimation(this,R.anim.sacudir_btn);
         progressDialog = new ProgressDialog(this);
@@ -185,8 +186,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         actionModeCallback = new ActionModeCallback();
 
         referenceVenta = FirebaseDatabase.getInstance().getReference().child("Venta");
+        referenceVenta.keepSynced(true);
         refUser = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
-
+        
         createVenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
