@@ -167,7 +167,7 @@
             android:visibility="gone"
             android:id="@+id/nuevo_valor"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_23sdp"
+            android:layout_height="wrap_content"
             android:text="Total = "
             android:textSize="@dimen/_20ssp"
             android:fontFamily="@font/ubuntu_medium"

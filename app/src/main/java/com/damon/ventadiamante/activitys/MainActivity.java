@@ -1330,14 +1330,21 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         List<Integer> selectedItempost = ventaAdapter.getSelectItms();
         for (int i = selectedItempost.size()-1;i>=0; i--){
             if (ventaList.get(selectedItempost.get(i))!=null){
-                total = total+ventaList.get(selectedItempost.get(i)).getPrecioDiamante();
+                total = total+ventaAdapter.getVentaList(selectedItempost.get(i)).getPrecioDiamante();
             }
         }
-        setTotal(total);
+        System.out.println("VALOR "  +total);
+
+        if (totalTV.getVisibility() == View.GONE){
+            setTotalNuevo(total);
+        }else {
+            setTotal(total);
+        }
+
     }
 
     private void selectedAll(ActionMode mode) {
-        for (int i = 0; i< ventaList.size(); i++){
+        for (int i = 0; i< ventaAdapter.getItemCount(); i++){
             enableActionMode(i);
         }
     }

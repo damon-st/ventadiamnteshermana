@@ -362,6 +362,10 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
         return res;
     }
 
+    public Venta getVentaList(int postion) {
+        return ventaList.get(postion);
+    }
+
     @Override
     public int getItemCount() {
         return ventaList.size();
