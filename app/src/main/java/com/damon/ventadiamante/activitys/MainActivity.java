@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
     int currentItems, totalItems, scrollOutitems;
 
+
     SwipeRefreshLayout swipeRefreshLayout;
     String uid,nombreComentario;
 
@@ -252,14 +253,15 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         getDataUser();
 
         swipeRefreshLayout.setRefreshing(false);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                mCurrentPage++;
-//                itemPost =0;
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCurrentPage++;
+                itemPost =0;
 //                loadMoreVenta();
-//            }
-//        });
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
 //        getAllVentas("");
 
