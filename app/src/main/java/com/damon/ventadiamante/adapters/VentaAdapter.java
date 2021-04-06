@@ -45,6 +45,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
-    implements ItemTouchHelperAdapter {
+    implements ItemTouchHelperAdapter, StickyRecyclerHeadersAdapter<TextTimeHolder> {
 
     Activity context;
     List<Venta> ventaList;
@@ -133,7 +134,7 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
         }else {
            // holder.img_diamante.setAnimation(AnimationUtils.loadAnimation(context,R.anim.fade_transition));
             holder.fecha_venta.setVisibility(View.GONE);
-            holder.constraintTime.setVisibility(View.VISIBLE);
+            holder.constraintTime.setVisibility(View.GONE);
             holder.time_new.setText(venta.getFechaVenta());
         }
 
@@ -364,6 +365,22 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
     public Venta getVentaList(int postion) {
         return ventaList.get(postion);
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return ventaList.get(position).getNumeroVenta();
+    }
+
+    @Override
+    public TextTimeHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_header,parent,false);
+        return new TextTimeHolder(view);
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(TextTimeHolder textTimeHolder, int i) {
+        textTimeHolder.txt_time.setText(ventaList.get(i).getFechaVenta());
     }
 
     @Override

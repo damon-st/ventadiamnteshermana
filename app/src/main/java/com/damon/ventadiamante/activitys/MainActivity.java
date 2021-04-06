@@ -75,6 +75,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         ventaAdapter.setTouchHelper(itemTouchHelper);
         itemTouchHelper.attachToRecyclerView(ventaRecycler);
         ventaRecycler.setAdapter(ventaAdapter);
+        ventaRecycler.addItemDecoration(new StickyRecyclerHeadersDecoration(ventaAdapter));
 
 //        LayoutAnimationController controller  =AnimationUtils.loadLayoutAnimation(this,R.anim.layout_slide_right);
 //        ventaRecycler.setLayoutAnimation(controller);

@@ -112,6 +112,11 @@ dependencies {
     //multidex
     implementation "androidx.multidex:multidex:2.0.1"
 
+    //librearia para recorte de iamgen en acudro
     implementation project(':documentscanner-release')
     implementation project(':openCVLibrary-release')
+
+
+    //libreria stickerHeader
+    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
 }
