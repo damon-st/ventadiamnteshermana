@@ -6,12 +6,22 @@ public class Diamante {
     double valor;
     int path;
     String colorPrice;
+    String id;
 
-    public Diamante(String diamantes, double valor, int path, String colorPrice) {
+    public Diamante(String diamantes, double valor, int path, String colorPrice, String id) {
         this.diamantes = diamantes;
         this.valor = valor;
         this.path = path;
         this.colorPrice = colorPrice;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getColorPrice() {

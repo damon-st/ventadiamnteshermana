@@ -1202,7 +1202,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
     private void sendNotifiaction(String receiver, final String username, final String message) {
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference().child("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override

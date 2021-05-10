@@ -106,7 +106,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
     double valor_diama;
     EditText descripcion_opcional;
 
-    DatabaseReference reference, ventaRef, referenceUsers;
+    DatabaseReference reference, ventaRef, referenceUsers,priceRef;
     FirebaseAuth auth;
     String vendedorUID;
     String colorVenta;
@@ -177,6 +177,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
         dialogErrores = new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog);
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        priceRef = FirebaseDatabase.getInstance().getReference().child("Precios");
 
         setDiamanteList();
 
@@ -212,7 +213,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
         pager_diamantes.setPageTransformer(compositePageTransformer);
 
 
-        diamantesAdapter = new DiamantesAdapter(this, this, diamanteList, pager_diamantes);
+        diamantesAdapter = new DiamantesAdapter(this, this, diamanteList, pager_diamantes,priceRef);
         pager_diamantes.setAdapter(diamantesAdapter);
 
 //        pager_diamantes.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -305,7 +306,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                          }
                      }
                      if (isNewDiamante){
-                         diamanteList.add(new Diamante(diamante_texto,valor_diama,R.drawable.diamantes_free,"#FF4842"));
+//                         diamanteList.add(new Diamante(diamante_texto,valor_diama,R.drawable.diamantes_free,"#FF4842"));
                      }
                  }
              }.start();
@@ -383,7 +384,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
         hashMap.put("descripcionDiamantes", diamante_texto);
         hashMap.put("precioDiamante", valor_diama);
         hashMap.put("descripcion", descripcion);
-
+        hashMap.put("numeroVenta", ventaFecha);
 
         if (fotosList.size()>cuentaFotosSubidas){
             for (int i = cuentaFotosSubidas; i < fotosList.size(); i++){
@@ -587,6 +588,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                 ventaFecha = newDate.getTime().getTime();
                 String output = dateFormat.format(ventaFecha);
                 ventaFecha = Long.parseLong(output.replace("-",""));
+                System.out.println("Fecha" + ventaFecha);
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -606,19 +608,43 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
     }
 
     private void setDiamanteList(){
-        diamanteList.add(new Diamante("100 + BONUS 10 DIAMANTES",1.30,R.drawable.diamantes_free,"#333333"));
-        diamanteList.add(new Diamante("200 + BONUS 20 DIAMANTES",2.60,R.drawable.diamantes_free,"#333333"));
-        diamanteList.add(new Diamante("310 + BONUS 31 DIAMANTES",3.50,R.drawable.diamantes_free,"#333333"));
-        diamanteList.add(new Diamante("520 + BONUS 52 DIAMANTES",5.25,R.drawable.diamantes_free,"#333333"));
-        diamanteList.add(new Diamante("620 + BONUS 62 DIAMANTES",6.75,R.drawable.diamantes_free,"#333333"));
-        diamanteList.add(new Diamante("825 + BONUS 88 DIAMANTES",8.85,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("1060 + BONUS 106 DIAMANTES",11.25,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("1360 + BONUS 147 DIAMANTES",14.75,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("1540 + BONUS 198 DIAMANTES",16.50,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("2180 + BONUS 218 DIAMANTES",21.25,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("2620 + BONUS 350 DIAMANTES",26.00,R.drawable.diamantes_free,"#FDBE3B"));
-        diamanteList.add(new Diamante("5600 + BONUS 560 DIAMANTES",51.00,R.drawable.diamantes_free,"#FF4842"));
+//        diamanteList.add(new Diamante("100 + BONUS 10 DIAMANTES",1.30,R.drawable.diamantes_free,"#333333"));
+//        diamanteList.add(new Diamante("200 + BONUS 20 DIAMANTES",2.60,R.drawable.diamantes_free,"#333333"));
+//        diamanteList.add(new Diamante("310 + BONUS 31 DIAMANTES",3.50,R.drawable.diamantes_free,"#333333"));
+//        diamanteList.add(new Diamante("520 + BONUS 52 DIAMANTES",5.25,R.drawable.diamantes_free,"#333333"));
+//        diamanteList.add(new Diamante("620 + BONUS 62 DIAMANTES",6.75,R.drawable.diamantes_free,"#333333"));
+//        diamanteList.add(new Diamante("825 + BONUS 88 DIAMANTES",8.85,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("1060 + BONUS 106 DIAMANTES",11.25,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("1360 + BONUS 147 DIAMANTES",14.75,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("1540 + BONUS 198 DIAMANTES",16.50,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("2180 + BONUS 218 DIAMANTES",21.25,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("2620 + BONUS 350 DIAMANTES",26.00,R.drawable.diamantes_free,"#FDBE3B"));
+//        diamanteList.add(new Diamante("5600 + BONUS 560 DIAMANTES",51.00,R.drawable.diamantes_free,"#FF4842"));
 
+        priceRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        Diamante diamante = new Diamante(dataSnapshot.child("diamantes").getValue().toString(),
+                                Double.parseDouble(dataSnapshot.child("valor").getValue().toString()),
+                                Integer.parseInt(dataSnapshot.child("path").getValue().toString()),
+                                        dataSnapshot.child("colorPrice").getValue().toString(),
+                                dataSnapshot.child("id").getValue().toString());
+                        diamanteList.add(diamante);
+                    }
+
+                    diamantesAdapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(CrearVentaActivity.this, "No existe precios", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CrearVentaActivity.this, "Error al cargar los precios " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setNewValor(){
@@ -647,9 +673,26 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
                         if (inputURL.getText().toString().trim().isEmpty() && inputNumber.getText().toString().trim().isEmpty()){
                             Toast.makeText(CrearVentaActivity.this, "Escribe el nuevo valor", Toast.LENGTH_SHORT).show();
                         }else {
-                            diamanteList.add(new Diamante(inputURL.getText().toString(),Double.parseDouble(inputNumber.getText().toString()),R.drawable.diamantes_free,"#FF4842"));
-                            diamantesAdapter.notifyDataSetChanged();
-                            alertDialog.dismiss();
+                            String id = UUID.randomUUID().toString();
+//                            diamanteList.add(new Diamante(,,R.drawable.diamantes_free,"#FF4842"));
+                            HashMap<String,Object> newPrice = new HashMap<>();
+                            newPrice.put("diamantes",inputURL.getText().toString());
+                            newPrice.put("valor",Double.parseDouble(inputNumber.getText().toString()));
+                            newPrice.put("path",1);
+                            newPrice.put("colorPrice","#FF4842");
+                            newPrice.put("id",id);
+                            priceRef.child(id).updateChildren(newPrice).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    alertDialog.dismiss();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CrearVentaActivity.this, "Error al crear un nuevo precio "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+//                            diamantesAdapter.notifyDataSetChanged();
                         }
                     }catch (Exception e){
                         Toast.makeText(CrearVentaActivity.this,"Error " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -896,6 +939,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
         hashMap.put("descripcion", descripcion);
         hashMap.put("numeroVenta", ventaFecha);
         hashMap.put("idVentaRef", ref);
+        System.out.println("Fecha actualizar" + ventaFecha);
 
         ventaRef.child(ref).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -46,7 +46,7 @@
         android:background="@null"
         android:fontFamily="@font/ubuntu_regular"
         android:gravity="center_vertical"
-        android:hint="Escribe aqui..."
+        android:hint="Escribe aqui el titulo..."
         android:textColor="@color/colorWhite"
         android:importantForAutofill="no"
         android:includeFontPadding="false"

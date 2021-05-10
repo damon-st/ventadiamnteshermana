@@ -22,7 +22,7 @@ public class DiamantesViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageDiamante;
     public TextView diamantes,precioDiamante;
     public RadioButton radioSelect;
-    public ImageView viewColor;
+    public ImageView viewColor,delete_price,edit_price;
 
     public DiamantesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -32,7 +32,8 @@ public class DiamantesViewHolder extends RecyclerView.ViewHolder {
         precioDiamante = itemView.findViewById(R.id.valor_venta);
         radioSelect = itemView.findViewById(R.id.radio_select);
         viewColor = itemView.findViewById(R.id.vista_color);
-
+        edit_price = itemView.findViewById(R.id.edit_price);
+        delete_price = itemView.findViewById(R.id.delete_price);
     }
 
     public void setViewColor(Diamante diamante){
