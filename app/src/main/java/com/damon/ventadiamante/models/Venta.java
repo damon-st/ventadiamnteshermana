@@ -18,6 +18,8 @@ public class Venta  implements Serializable {
     String idVentaRef;
     List<ImagesDB> image;
 
+    private boolean isCancel = false;
+
     public Venta() {
     }
 
@@ -33,6 +35,14 @@ public class Venta  implements Serializable {
         this.numeroVenta = numeroVenta;
         this.idVentaRef = idVentaRef;
         this.image = image;
+    }
+
+    public boolean isCancel() {
+        return isCancel;
+    }
+
+    public void setCancel(boolean cancel) {
+        isCancel = cancel;
     }
 
     public List<ImagesDB> getImage() {

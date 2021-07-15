@@ -402,6 +402,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             public void run() {
                 if (ventaAdapter.getItemCount() != 0){
                     count_ventas.setText("N° " + ventaAdapter.getItemCount());
+                    ventaAdapter.hastaAquiPagado();
+                    setTotal(ventaAdapter.getNewTotal());
                 }
             }
         },2700);
@@ -882,9 +884,14 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
                             Venta venta = new Venta(vendedorName,vendedorUID,fechaVenta,colorValorPorVenta,colorVendedor,
                                       descripcionDiamantes,precioDiamante,descripcion,numeroVenta,idVentaRef,image);
+//
+//                            total = total+venta.getPrecioDiamante();
+//                            setTotal(total);
 
-                            total = total+venta.getPrecioDiamante();
-                            setTotal(total);
+
+//                            total = total+venta.getPrecioDiamante();
+                            setTotal(ventaAdapter.getNewTotal()+venta.getPrecioDiamante());
+
                             listKeyDelete.add(snapshot.getKey());
                             ventaList.add(venta);
                             ventaAdapter.notifyDataSetChanged();
@@ -1020,8 +1027,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                         String key = snapshot.getKey();
                         int index = listKeyDelete.indexOf(key);
                         try {
-                            total = total-venta.getPrecioDiamante();
-                            setTotal(total);
+//                            total = total-venta.getPrecioDiamante();
+                            setTotal(ventaAdapter.getNewTotal()-venta.getPrecioDiamante());
                             ventaAdapter.notifyItemRemoved(index);
                         }catch (Exception e){
                             e.printStackTrace();
@@ -1065,7 +1072,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
     }
 
     private void setTotal(double total){
-        double res = total;
+      double res = total;
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(3);
         totalTV.setText("TOTAL = " + nf.format(res));
@@ -1324,7 +1331,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         public void onDestroyActionMode(ActionMode mode) {
             ventaAdapter.clearSelections();
             actionMode = null;
-            setTotal(total);
+            setTotal(ventaAdapter.getNewTotal());
             Tools.setSystemBarColor(MainActivity.this,R.color.colorPrimary);
         }
     }

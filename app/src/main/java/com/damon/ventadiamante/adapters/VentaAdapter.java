@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -238,7 +239,54 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
             toggleCheckedIcon(holder,position);
 
+            if (venta.isCancel()){
+                holder.linearLayout.setAlpha(0.3f);
+            }else {
+                holder.linearLayout.setAlpha(1);
+
+            }
+
     }
+
+
+    public void hastaAquiPagado(){
+        if (ventaList.size()>0 || ventaList != null) {
+
+            int posicion = -1;
+
+            for (int i =0; i<ventaList.size();i++){
+
+                if (ventaList.get(i).getColorValorPorVenta().trim().toLowerCase().contains("hasta")){
+                    posicion = i;
+                }
+            }
+
+            Log.d("pagado", "position: "+ posicion );
+
+            for (int i = posicion ; i >=0; i--){
+                Log.d("entra", "entro " + posicion);
+                ventaList.get(i).setCancel(true);
+
+            }
+
+            notifyDataSetChanged();
+        }
+    }
+
+    public double getNewTotal(){
+        double valor = 0;
+
+        if (ventaList.size()>0){
+            for (int i = 0; i< ventaList.size(); i++){
+                if (!ventaList.get(i).isCancel()){
+                    valor+= ventaList.get(i).getPrecioDiamante();
+                }
+            }
+        }
+
+        return valor;
+    };
+
 
     private void quitarAnotado(String idVentaRef,int position) {
         HashMap<String,Object> hashMap = new HashMap<>();
