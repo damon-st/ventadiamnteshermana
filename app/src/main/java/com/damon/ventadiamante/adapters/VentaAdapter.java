@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.activitys.CrearVentaActivity;
+import com.damon.ventadiamante.activitys.FacturaWebView;
 import com.damon.ventadiamante.activitys.ImageViewer;
 import com.damon.ventadiamante.interfaces.ItemTouchHelperAdapter;
 import com.damon.ventadiamante.interfaces.VentaClick;
@@ -212,6 +214,15 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
                                 mostraImagenes(venta.getImage(),venta.getIdVentaRef());
                             }else if (item.getItemId() == R.id.quitar_anotado){
                                 quitarAnotado(venta.getIdVentaRef(),position);
+                            }else if (item.getItemId() == R.id.descargar_factura){
+//                                Intent intent = new Intent(context, FacturaWebView.class);
+//                                intent.putExtra("id",venta.getIdVentaRef());
+//                                context.startActivity(intent);
+
+                                Uri uri = Uri.parse("https://ventadiamantes-329aa.firebaseapp.com/factura/"+venta.getIdVentaRef());
+                                Log.d("url", " " + uri);
+                                Intent intent1  = new Intent(Intent.ACTION_VIEW,uri);
+                                context.startActivity(intent1);
                             }
                             return false;
                         }

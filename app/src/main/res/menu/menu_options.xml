@@ -23,6 +23,11 @@
         app:showAsAction="collapseActionView"/>
 
     <item
+        android:title="Descargar Factura"
+        android:id="@+id/descargar_factura"
+        />
+
+    <item
         android:title="Eliminar Venta"
         android:id="@+id/delete_item"
         app:showAsAction="collapseActionView"/>
