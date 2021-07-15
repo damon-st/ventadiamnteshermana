@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.damon.ventadiamante.R;
 import com.damon.ventadiamante.Tools;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
 
 
+    private LottieAnimationView progess_ventas;
 
     Animation animationUtils;
 
@@ -177,6 +179,9 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
         totalTV = findViewById(R.id.imageAddNote);
         ventaRecycler = findViewById(R.id.venta_recyclerView);
         ventaRecycler.setHasFixedSize(true);
+
+        progess_ventas = findViewById(R.id.progess_ventas);
+        progess_ventas.setVisibility(View.VISIBLE);
 
 
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -254,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         getDataUser();
 
+        swipeRefreshLayout.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -401,9 +407,12 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             @Override
             public void run() {
                 if (ventaAdapter.getItemCount() != 0){
+                    progess_ventas.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
                     count_ventas.setText("N° " + ventaAdapter.getItemCount());
                     ventaAdapter.hastaAquiPagado();
                     setTotal(ventaAdapter.getNewTotal());
+                    ventaRecycler.smoothScrollToPosition(ventaAdapter.getItemCount());
                 }
             }
         },2700);
@@ -964,6 +973,8 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
                         try {
                             ventaList.set(index,venta);
                             ventaAdapter.notifyDataSetChanged();
+                            ventaAdapter.hastaAquiPagado();
+                            setTotal(ventaAdapter.getNewTotal());
                         }catch (Exception e){
                             e.printStackTrace();
                             recreate();
@@ -1176,9 +1187,14 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
             System.out.println("si entra aqui" + notify);
             sendNotifiaction(messageReciverID, nombreComentario, msg);
         }
+        ventaAdapter.hastaAquiPagado();
+        setTotal(ventaAdapter.getNewTotal());
         notify = false;
         dialogAddComentario.dismiss();
         dialogAddComentario = null;
+
+
+
 //        mAdapter.refresh();
 //        ventaRecycler.smoothScrollToPosition(mAdapter.getItemCount());
 

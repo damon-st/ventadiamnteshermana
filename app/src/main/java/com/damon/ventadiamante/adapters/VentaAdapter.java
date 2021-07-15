@@ -268,8 +268,12 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
                 ventaList.get(i).setCancel(true);
 
             }
-
-            notifyDataSetChanged();
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            },500);
         }
     }
 
@@ -297,6 +301,8 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
                 notifyItemChanged(position);
             }
         });
+
+        hastaAquiPagado();
     }
 
 
@@ -433,7 +439,11 @@ public class VentaAdapter  extends RecyclerView.Adapter<VentaViewHolder>
 
     @Override
     public int getItemCount() {
-        return ventaList.size();
+        if (ventaList.size()>0){
+            return ventaList.size();
+        }else {
+            return 0;
+        }
     }
 
     public double valor(){
