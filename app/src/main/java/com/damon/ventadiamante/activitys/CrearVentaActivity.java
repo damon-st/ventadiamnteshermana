@@ -178,6 +178,7 @@ public class CrearVentaActivity extends AppCompatActivity implements DiamanteCli
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         priceRef = FirebaseDatabase.getInstance().getReference().child("Precios");
+        priceRef.keepSynced(true);
 
         setDiamanteList();
 

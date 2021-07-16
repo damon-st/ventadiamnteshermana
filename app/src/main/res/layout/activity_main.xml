@@ -114,18 +114,6 @@
 
 
 
-    <com.airbnb.lottie.LottieAnimationView
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSearch"
-        app:layout_constraintBottom_toBottomOf="@+id/layoutQuickActions"
-        android:visibility="gone"
-        android:id="@+id/progess_ventas"
-        />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:visibility="visible"
@@ -156,6 +144,18 @@
 
 
 
+    <com.airbnb.lottie.LottieAnimationView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_rawRes="@raw/loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@+id/layoutSearch"
+        app:layout_constraintBottom_toBottomOf="@+id/layoutQuickActions"
+        android:visibility="gone"
+        android:id="@+id/progess_ventas"
+        />
 
     <LinearLayout
         android:id="@+id/layoutQuickActions"

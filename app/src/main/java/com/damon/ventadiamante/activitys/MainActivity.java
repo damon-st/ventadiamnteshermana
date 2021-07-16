@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements  BuscarClick, Ven
 
         getDataUser();
 
-        swipeRefreshLayout.setVisibility(View.GONE);
+
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
